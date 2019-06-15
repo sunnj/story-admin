@@ -21,33 +21,6 @@ spring:
     testOnReturn: false
     filters: stat,wall,log4j
     logSlowSql: true
-#    druid:
-#      initial-size: 5
-#      min-idle: 5
-#      max-active: 20
-#      max-wait: 60000
-#      min-evictable-idle-time-millis: 300000
-#      pool-prepared-statements: false
-#      max-pool-prepared-statement-per-connection-size: 20
-#      validation-query: select 1
-#      test-on-borrow: false
-#      test-on-return: false
-#      test-while-idle: true
-#      filter:
-#        stat:
-#          db-type: mysql
-#          log-slow-sql: true
-#          slow-sql-millis: 2000
-#        wall:
-#          enabled: false
-#          db-type: mysql
-#          config:
-#            multi-statement-allow: true
-#      web-stat-filter:
-#        exclusions: '*.js,*.gif,*.jpg,*.png,*.css,*.ico,/druid/*'
-#      stat-view-servlet:
-#        login-username: druid
-#        login-password: 123456
   redis:
     database: 0
     host: localhost
