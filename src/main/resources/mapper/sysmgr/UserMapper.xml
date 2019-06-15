@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.story.storyadmin.mapper.sysmgr.UserMapper">
+
+    <!-- 开启二级缓存 -->
+    <cache type="org.mybatis.caches.ehcache.LoggingEhcache"/>
+
+    <!--根据角色ID获取权限-->
+    <select id="selectRoleByUserId" resultType="Long">
+        SELECT
+          role_id
+        FROM   st_user_role
+        where user_id= #{userId}
+              and yn_flag='1'
+    </select>
+
+    <!--根据UserId删除-->
+    <update id="deleteRoleByUserId" parameterType="UserRole">
+      update st_user_role set yn_flag='0',
+      editor=#{editor},
+      modified_time=#{modifiedTime}
+      where user_id= #{userId}
+            and yn_flag='1'
+    </update>
+
+    <!--批量新增-->
+    <insert id="batchInsertUserRole" parameterType="java.util.List" useGeneratedKeys="false">
+        insert into st_user_role(user_id,role_id,yn_flag,creator,editor,created_time,modified_time)
+        values
+        <foreach collection="list" item="item" index="index" separator=",">
+            (
+                #{item.userId},
+                #{item.roleId},
+                #{item.ynFlag},
+                #{item.creator},
+                #{item.editor},
+                #{item.createdTime},
+                #{item.modifiedTime}
+            )
+        </foreach>
+    </insert>
+
+
+
+</mapper>

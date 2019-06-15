@@ -1,0 +1,48 @@
+server:
+  port: 9430
+spring:
+  profiles:
+    active: ${runProType}
+
+logging:
+  config: classpath:log4j2.xml
+mybatis-plus:
+  mapper-locations: classpath:/mapper/**/*.xml
+  #实体扫描，多个package用逗号或者分号分隔
+  typeAliasesPackage: com.story.storyadmin.domain.entity
+  mapperClassScan: com.story.storyadmin.mapper
+  global-config:
+    #主键类型  0:"数据库ID自增", 1:"用户输入ID",2:"全局唯一ID (数字类型唯一ID)", 3:"全局唯一ID UUID";
+    id-type: 0
+    #字段策略 0:"忽略判断",1:"非 NULL 判断"),2:"非空判断"
+    field-strategy: 2
+    #驼峰下划线转换
+    db-column-underline: true
+    #刷新mapper 调试神器
+    refresh-mapper: true
+    #数据库大写下划线转换
+    #capital-mode: true
+    #逻辑删除配置（下面3个配置）
+    #    logic-delete-value: 0
+    #    logic-not-delete-value: 1
+    #自定义SQL注入器
+    #sql-injector: com.baomidou.springboot.xxx
+    logic-delete-value: 1
+    logic-not-delete-value: 0
+    #    sql-injector: com.baomidou.mybatisplus.mapper.LogicSqlInjector
+    # SQL 解析缓存，开启后多租户 @SqlParser 注解生效
+    #sql-parser-cache: true
+  configuration:
+    map-underscore-to-camel-case: true
+    cache-enabled: false
+token:
+  #  token有效时间，单位分钟 24*60=1440
+  tokenExpireTime: 1440
+  # 更新令牌时间 2*60=120
+  refreshCheckTime: 120
+  #  #  RefreshToken过期时间，单位：分钟, 24*60=1440
+  #  refreshTokenExpireTime: 1440
+  #  shiro缓存有效期，单位分钟,2*60=120
+  shiroCacheExpireTime: 120
+  #  token加密密钥
+  secretKey: story-admin

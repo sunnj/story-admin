@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+        <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.story.storyadmin.mapper.sysmgr.RoleAuthorityMapper">
+
+<!-- 开启二级缓存 -->
+<cache type="org.mybatis.caches.ehcache.LoggingEhcache"/>
+
+    <!--根据角色ID获取权限-->
+    <select id="selectAuthByRoleId" resultType="Long">
+        SELECT
+          authority_id
+        FROM  st_role_authority
+        where role_id= #{roleId}
+              and yn_flag='1'
+              and authority_id not in (select distinct pid from st_authority where yn_flag='1')
+    </select>
+
+    <!--根据RoleID删除-->
+    <update id="deleteAuthByRoleId" parameterType="RoleAuthority">
+      update st_role_authority set yn_flag='0',
+      editor=#{editor},
+      modified_time=#{modifiedTime}
+      where role_id= #{roleId}
+            and yn_flag='1'
+    </update>
+
+
+    <!--批量新增-->
+    <insert id="batchInsert" parameterType="java.util.List" useGeneratedKeys="false">
+      insert into st_role_authority(role_id,authority_id,yn_flag,creator,editor,created_time,modified_time)
+      values
+        <foreach collection="list" item="item" index="index" separator=",">
+          (
+            #{item.roleId},
+            #{item.authorityId},
+            #{item.ynFlag},
+            #{item.creator},
+            #{item.editor},
+            #{item.createdTime},
+            #{item.modifiedTime}
+          )
+        </foreach>
+    </insert>
+
+
+
+</mapper>

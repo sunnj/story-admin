@@ -1,0 +1,65 @@
+project:
+  domain: http://localhost:9430
+
+spring:
+  datasource:
+    type: com.alibaba.druid.pool.DruidDataSource
+    driverClassName: com.mysql.jdbc.Driver
+    driver-class-name: com.mysql.jdbc.Driver
+    url: jdbc:mysql://127.0.0.1/story_admin?useSSL=false&allowMultiQueries=true&characterEncoding=utf8&serverTimezone=UTC
+    username: root
+    password: 123456
+    initialSize: 5
+    minIdle: 5
+    maxActive: 20
+    maxWait: 60000
+    timeBetweenEvictionRunsMillis: 60000
+    minEvictableIdleTimeMillis: 300000
+    validationQuery: SELECT1FROMDUAL
+    testWhileIdle: true
+    testOnBorrow: false
+    testOnReturn: false
+    filters: stat,wall,log4j
+    logSlowSql: true
+#    druid:
+#      initial-size: 5
+#      min-idle: 5
+#      max-active: 20
+#      max-wait: 60000
+#      min-evictable-idle-time-millis: 300000
+#      pool-prepared-statements: false
+#      max-pool-prepared-statement-per-connection-size: 20
+#      validation-query: select 1
+#      test-on-borrow: false
+#      test-on-return: false
+#      test-while-idle: true
+#      filter:
+#        stat:
+#          db-type: mysql
+#          log-slow-sql: true
+#          slow-sql-millis: 2000
+#        wall:
+#          enabled: false
+#          db-type: mysql
+#          config:
+#            multi-statement-allow: true
+#      web-stat-filter:
+#        exclusions: '*.js,*.gif,*.jpg,*.png,*.css,*.ico,/druid/*'
+#      stat-view-servlet:
+#        login-username: druid
+#        login-password: 123456
+  redis:
+    database: 0
+    host: localhost
+    port: 6379
+    jedis:
+      pool:
+        min-idle: 10
+        max-idle: 50
+        max-active: 200
+        max-wait: 3000
+
+mybatis-plus:
+  configuration:
+    #日志打印sql
+    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
