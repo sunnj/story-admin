@@ -1,5 +1,6 @@
 package com.story.storyadmin.config.shiro.cache;
 
+import com.story.storyadmin.config.shiro.security.JwtProperties;
 import com.story.storyadmin.utils.JedisUtils;
 import org.apache.shiro.cache.Cache;
 import org.apache.shiro.cache.CacheException;
@@ -13,8 +14,11 @@ public class ShiroCacheManager implements CacheManager {
     @Autowired
     JedisUtils jedisUtils;
 
+    @Autowired
+    JwtProperties jwtProperties;
+
     @Override
     public <K, V> Cache<K, V> getCache(String s) throws CacheException {
-        return new ShiroCache<K,V>(jedisUtils);
+        return new ShiroCache<K,V>(jedisUtils,jwtProperties);
     }
 }

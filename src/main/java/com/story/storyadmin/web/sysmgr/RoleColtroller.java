@@ -123,7 +123,7 @@ public class RoleColtroller {
     @RequestMapping(value="/listall")
     public Result list(){
         QueryWrapper<Role> eWrapper = new QueryWrapper();
-        eWrapper.eq("yn_flag={0}","1");
+        eWrapper.eq("yn_flag","1");
         List<Role> list = roleService.list(eWrapper);
 
         Result result = new Result();

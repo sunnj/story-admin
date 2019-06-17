@@ -48,7 +48,7 @@ public class JedisUtils {
 	private HashOperations<String, String, Object> valOpsHash;
 	
     private static final ObjectMapper mapper = new ObjectMapper();
-    
+
     /** 
      * 将数据存入缓存 
      * 
@@ -145,11 +145,14 @@ public class JedisUtils {
      * @param key 
      * @param obj 
      * @return 
-     * @throws JsonProcessingException 
-     */ 
-    public void saveObject(String key, Object obj) throws JsonProcessingException {
-    	valOpsStr.set(key, mapper.writeValueAsString(obj));  
-    } 
+     */
+    public void saveObject(String key, Object obj){
+        try {
+            redisTemplate.opsForValue().set(key, obj);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
     
     /** 
      * 保存复杂类型数据到缓存（并设置失效时间） 
@@ -160,9 +163,13 @@ public class JedisUtils {
      * @return 
      * @throws JsonProcessingException 
      */  
-    public void saveObject(String key, Object obj, int seconds) throws JsonProcessingException {
-    	valOpsStr.set(key, mapper.writeValueAsString(obj), seconds, TimeUnit.SECONDS);  
-    }  
+    public void saveObject(String key, Object value, int seconds) {
+        if(seconds>0){
+            redisTemplate.opsForValue().set(key, value, seconds, TimeUnit.SECONDS);
+        }else{
+            this.saveObject(key, value);
+        }
+    }
     
     /** 
      * 功能: 存到指定的队列中，不限制队列大小
@@ -172,7 +179,7 @@ public class JedisUtils {
      * @param val 
      *            
      */  
-    public void saveToQueue(String key, String val) {  
+    public void saveToQueue(String key, String val) {
     	saveToQueue(key, val, 0);
     }
     
@@ -283,36 +290,29 @@ public class JedisUtils {
      * 取得复杂类型数据
      * @param key
      * @return
-     * @throws IOException
-     * @throws JsonMappingException
-     * @throws JsonParseException
      */
-    public Object getObject(String key) throws JsonParseException, JsonMappingException, IOException {
-        String value = valOpsStr.get(key);
-        if (value == null) {
-            return null;
-        }
-        return mapper.readValue(value, Object.class);
+    public Object getObject(String key) {
+        return key==null?null:redisTemplate.opsForValue().get(key);
     }
     
-    /** 
-     * 取得复杂类型数据 
-     * 
-     * @param key 
-     * @param obj 
-     * @param clazz 
-     * @return 
-     * @throws IOException 
-     * @throws JsonMappingException 
-     * @throws JsonParseException 
-     */  
-    public <T> T getObject(String key, Class<T> clazz) throws JsonParseException, JsonMappingException, IOException {
-        String value = valOpsStr.get(key);  
-        if (value == null) {  
-            return null;  
-        }  
-        return mapper.readValue(value, clazz);  
-    }
+//    /**
+//     * 取得复杂类型数据
+//     *
+//     * @param key
+//     * @param obj
+//     * @param clazz
+//     * @return
+//     * @throws IOException
+//     * @throws JsonMappingException
+//     * @throws JsonParseException
+//     */
+//    public <T> T get(String key, Class<T> clazz) throws JsonParseException, JsonMappingException, IOException {
+//        String value = valOpsStr.get(key);
+//        if (value == null) {
+//            return null;
+//        }
+//        return mapper.readValue(value, clazz);
+//    }
     
     /** 
      * 从缓存中取得字符串数据 

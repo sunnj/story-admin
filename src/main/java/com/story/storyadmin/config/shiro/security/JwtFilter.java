@@ -27,13 +27,16 @@ public class JwtFilter extends BasicHttpAuthenticationFilter {
 
     private Logger LOGGER = LoggerFactory.getLogger(this.getClass());
 
-    @Autowired
     JwtProperties jwtProperties;
-
-    @Autowired
     ISyncCacheService syncCacheService;
 
-    public static final String LOCK = "sendEmail4FailSchedule";
+    public JwtFilter(){}
+
+    public JwtFilter(JwtProperties jwtProperties,ISyncCacheService syncCacheService){
+        this.jwtProperties=jwtProperties;
+        this.syncCacheService=syncCacheService;
+    }
+
 
     /**
      * 检测Header里Authorization字段

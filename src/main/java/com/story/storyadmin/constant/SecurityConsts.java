@@ -2,7 +2,7 @@ package com.story.storyadmin.constant;
 
 public class SecurityConsts {
 
-    public static final String LOGIN_SALT = "finsetts-scm";
+    public static final String LOGIN_SALT = "story-admin";
 
     /**
      * request请求头属性
@@ -20,19 +20,14 @@ public class SecurityConsts {
     public static final String ORG_ID_TOKEN = "orgIdToken";
 
     /**
-     * 业务线ID
-     */
-    public static final String BL_ID_TOKEN = "blIdToken";
-
-    /**
      * Shiro redis 前缀
      */
-    public static final String PREFIX_SHIRO_CACHE = "finsetts-scm:cache:";
+    public static final String PREFIX_SHIRO_CACHE = "story-admin:cache:";
 
     /**
      * redis-key-前缀-shiro:refresh_check
      */
-    public final static String PREFIX_SHIRO_REFRESH_CHECK = "scm:refresh_check:";
+    public final static String PREFIX_SHIRO_REFRESH_CHECK = "story:refresh_check:";
 
     /**
      * JWT-currentTimeMillis

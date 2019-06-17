@@ -3,7 +3,9 @@ package com.story.storyadmin.config;
 import com.story.storyadmin.config.shiro.ShiroRealm;
 import com.story.storyadmin.config.shiro.cache.ShiroCacheManager;
 import com.story.storyadmin.config.shiro.security.JwtFilter;
+import com.story.storyadmin.config.shiro.security.JwtProperties;
 import com.story.storyadmin.config.shiro.security.SystemLogoutFilter;
+import com.story.storyadmin.service.common.ISyncCacheService;
 import org.apache.shiro.mgt.DefaultSessionStorageEvaluator;
 import org.apache.shiro.mgt.DefaultSubjectDAO;
 import org.apache.shiro.spring.LifecycleBeanPostProcessor;
@@ -62,13 +64,13 @@ public class ShiroConfig {
     }
 
     @Bean
-    public ShiroFilterFactoryBean shiroFilter(DefaultWebSecurityManager securityManager) {
+    public ShiroFilterFactoryBean shiroFilter(DefaultWebSecurityManager securityManager,JwtProperties jwtProp,ISyncCacheService syncCacheService) {
         ShiroFilterFactoryBean shiroFilter = new ShiroFilterFactoryBean();
         shiroFilter.setSecurityManager(securityManager);
 
         // 添加jwt过滤器
         Map<String, Filter> filterMap = new HashMap<>();
-        filterMap.put("jwt", jwtFilter());
+        filterMap.put("jwt", new JwtFilter(jwtProp,syncCacheService));
         filterMap.put("logout", new SystemLogoutFilter());
         shiroFilter.setFilters(filterMap);
 
@@ -81,8 +83,4 @@ public class ShiroConfig {
         return shiroFilter;
     }
 
-    @Bean
-    public JwtFilter jwtFilter(){
-        return new JwtFilter();
-    }
 }
