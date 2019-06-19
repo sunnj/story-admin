@@ -9,7 +9,6 @@ import com.story.storyadmin.domain.entity.sysmgr.User;
 import com.story.storyadmin.service.sysmgr.AuthorityService;
 import com.story.storyadmin.service.sysmgr.RoleService;
 import com.story.storyadmin.service.sysmgr.UserService;
-import com.story.storyadmin.utils.JedisUtils;
 import org.apache.shiro.authc.AuthenticationException;
 import org.apache.shiro.authc.AuthenticationInfo;
 import org.apache.shiro.authc.AuthenticationToken;
@@ -34,9 +33,6 @@ public class ShiroRealm extends AuthorizingRealm {
 
 	@Autowired
 	private AuthorityService authorityService;
-
-	@Autowired
-	private JedisUtils jedisUtils;
 
 	@Override
 	public boolean supports(AuthenticationToken token) {

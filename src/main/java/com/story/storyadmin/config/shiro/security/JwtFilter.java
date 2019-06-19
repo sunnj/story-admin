@@ -3,17 +3,14 @@ package com.story.storyadmin.config.shiro.security;
 import com.alibaba.fastjson.JSON;
 import com.auth0.jwt.exceptions.SignatureVerificationException;
 import com.auth0.jwt.exceptions.TokenExpiredException;
-
 import com.story.storyadmin.config.shiro.LoginUser;
 import com.story.storyadmin.constant.Constants;
 import com.story.storyadmin.constant.SecurityConsts;
 import com.story.storyadmin.domain.vo.Result;
 import com.story.storyadmin.service.common.ISyncCacheService;
-import com.story.storyadmin.utils.JedisUtils;
 import org.apache.shiro.web.filter.authc.BasicHttpAuthenticationFilter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 
 import javax.servlet.ServletRequest;
@@ -58,7 +55,7 @@ public class JwtFilter extends BasicHttpAuthenticationFilter {
      * @throws Exception
      */
     @Override
-    protected boolean executeLogin(ServletRequest request, ServletResponse response) throws Exception {
+    protected boolean executeLogin(ServletRequest request, ServletResponse response){
         HttpServletRequest httpServletRequest = (HttpServletRequest) request;
         String authorization = httpServletRequest.getHeader(SecurityConsts.REQUEST_AUTH_HEADER);
 
@@ -81,7 +78,6 @@ public class JwtFilter extends BasicHttpAuthenticationFilter {
 
     /**
      * 检查是否需要,刷新Token
-     *
      * @param account
      * @param authorization
      * @param response

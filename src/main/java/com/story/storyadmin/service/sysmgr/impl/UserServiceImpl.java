@@ -97,30 +97,22 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
 
     /**
      * ERP登录
-     *
      * @return
      */
     @Override
     public Result loginErp(HttpServletResponse response) {
-//        LoginContext loginContext=LoginContext.getLoginContext();
 
+        //@Todo 待开发
 //        User userBean = this.findUserByAccount("admin");
-//        if(userBean==null || "0".equals(userBean.getErpFlag())){
+//        if (userBean == null || "0".equals(userBean.getErpFlag())) {
 //            //ERP账号不在系统中，或者系统中标志是非ERP账号
 //            return new Result(false, "用户未授权", null, Constants.PASSWORD_CHECK_INVALID);
 //        }
-//
 //        //账号是否锁定
 //        if ("0".equals(userBean.getStatus())) {
 //            return new Result(false, "该账号已被锁定", null, Constants.PASSWORD_CHECK_INVALID);
 //        }
-
-//        if(loginContext!=null){
-//            this.loginSuccess(loginContext.getPin(),response);
         return new Result(true, "登录成功", null, Constants.TOKEN_CHECK_SUCCESS);
-//        }else{
-//            return new Result(false, "登录失败", null ,Constants.TOKEN_CHECK_STALE_DATED);
-//        }
     }
 
     /**
@@ -132,20 +124,6 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
     private void loginSuccess(String account, HttpServletResponse response) {
 
         String currentTimeMillis = String.valueOf(System.currentTimeMillis());
-
-        // 清除可能存在的Shiro权限信息缓存
-        String tokenKey = SecurityConsts.PREFIX_SHIRO_CACHE + account;
-        if (jedisUtils.exists(tokenKey)) {
-            jedisUtils.delKey(tokenKey);
-        }
-
-//        //更新RefreshToken缓存的时间戳
-//        String refreshTokenKey= SecurityConsts.PREFIX_SHIRO_REFRESH_TOKEN + account;
-//        if (jedisUtils.exists(refreshTokenKey)) {
-//            jedisUtils.saveString(refreshTokenKey, currentTimeMillis, jwtProperties.getRefreshTokenExpireTime()*60*60l);
-//        }else{
-//            jedisUtils.saveString(refreshTokenKey, currentTimeMillis, jwtProperties.getRefreshTokenExpireTime()*60*60l);
-//        }
 
         //生成token
         JSONObject json = new JSONObject();
