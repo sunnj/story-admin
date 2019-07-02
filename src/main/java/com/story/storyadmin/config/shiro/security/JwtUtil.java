@@ -57,7 +57,7 @@ public class JwtUtil {
     }
 
     /**
-     * 生成签名,5min后过期
+     * 生成签名,n分钟后过期
      * @param account
      * @param currentTimeMillis
      * @return
