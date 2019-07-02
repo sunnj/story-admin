@@ -14,10 +14,7 @@ import com.story.storyadmin.service.sysmgr.UserService;
 import org.apache.shiro.authz.annotation.RequiresAuthentication;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.time.Instant;
 import java.util.Date;
@@ -37,7 +34,7 @@ public class UserController {
      * @return
      */
     @RequiresPermissions("sysmgr.user.query")
-    @RequestMapping(value="/list")
+    @RequestMapping(value="/list",method = {RequestMethod.POST})
     public Result list(User user,
                        @RequestParam(defaultValue = "1")int pageNo,
                        @RequestParam(defaultValue = "10")int limit){
@@ -59,7 +56,7 @@ public class UserController {
      * @return
      */
     @RequiresPermissions("sysmgr.user.query")
-    @RequestMapping(value="/find")
+    @RequestMapping(value="/find",method = {RequestMethod.POST})
     public Result findById(@RequestBody User user){
         User userBean= userService.getById(user.getId());
         userBean.setPassword("********");
@@ -77,7 +74,7 @@ public class UserController {
      * @return
      */
     @RequiresPermissions("sysmgr.user.save")
-    @RequestMapping(value="/save")
+    @RequestMapping(value="/save",method = {RequestMethod.POST})
     public Result save(@RequestBody User user){
         return userService.persist(user);
     }
@@ -88,7 +85,7 @@ public class UserController {
      * @return
      */
     @RequiresPermissions("sysmgr.user.delete")
-    @RequestMapping(value="/delete")
+    @RequestMapping(value="/delete",method = {RequestMethod.POST})
     public Result dropById(@RequestBody User user){
         Result result ;
         if(user.getId()!=null){
@@ -110,7 +107,7 @@ public class UserController {
      * @return
      */
     @RequiresPermissions("sysmgr.user.query")
-    @RequestMapping(value="/findUserRole")
+    @RequestMapping(value="/findUserRole",method = {RequestMethod.POST})
     public Result findUserRole(@RequestBody UserRoleVo user){
         return userService.findUserRole(user.getUserId());
     }
@@ -121,7 +118,7 @@ public class UserController {
      * @return
      */
     @RequiresPermissions("sysmgr.user.save")
-    @RequestMapping(value="/saveUserRole")
+    @RequestMapping(value="/saveUserRole",method = {RequestMethod.POST})
     public Result saveUserRole(@RequestBody UserRoleVo userRole){
         return userService.saveUserRoles(userRole);
     }
@@ -132,7 +129,7 @@ public class UserController {
      * @return
      */
     @RequiresAuthentication
-    @RequestMapping(value="/editpassword")
+    @RequestMapping(value="/editpassword",method = {RequestMethod.POST})
     public Result editPassWord(@RequestBody UserPassword userPassword){
         return userService.editPassWord(userPassword);
     }

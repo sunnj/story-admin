@@ -11,10 +11,7 @@ import com.story.storyadmin.domain.vo.sysmgr.RoleAuth;
 import com.story.storyadmin.service.sysmgr.RoleService;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.time.Instant;
 import java.util.Date;
@@ -28,7 +25,7 @@ public class RoleColtroller {
     RoleService roleService;
 
     @RequiresPermissions("sysmgr.role.query")
-    @RequestMapping(value="/list")
+    @RequestMapping(value="/list",method = {RequestMethod.POST})
     public Result list(Role role,
                        @RequestParam(defaultValue = "1")int pageNo,
                        @RequestParam(defaultValue = "10")int limit){
@@ -49,7 +46,7 @@ public class RoleColtroller {
      * @return
      */
     @RequiresPermissions("sysmgr.role.query")
-    @RequestMapping(value="/find")
+    @RequestMapping(value="/find",method = {RequestMethod.POST})
     public Result findById(@RequestBody Role role){
         Role rolebean= roleService.getById(role.getId());
         Result result = new Result();
@@ -65,7 +62,7 @@ public class RoleColtroller {
      * @return
      */
     @RequiresPermissions("sysmgr.role.save")
-    @RequestMapping(value="/save")
+    @RequestMapping(value="/save",method = {RequestMethod.POST})
     public Result save(@RequestBody Role role){
         return roleService.persist(role);
     }
@@ -76,7 +73,7 @@ public class RoleColtroller {
      * @return
      */
     @RequiresPermissions("sysmgr.role.delete")
-    @RequestMapping(value="/delete")
+    @RequestMapping(value="/delete",method = {RequestMethod.POST})
     public Result dropById(@RequestBody Role role){
         Result result ;
         if(role.getId()!=null){
@@ -98,7 +95,7 @@ public class RoleColtroller {
      * @return
      */
     @RequiresPermissions("sysmgr.role.save")
-    @RequestMapping(value="/modifyAuth")
+    @RequestMapping(value="/modifyAuth",method = {RequestMethod.POST})
     public Result dropById(@RequestBody RoleAuth roleAuth){
         return roleService.saveRoleAuths(roleAuth);
     }
@@ -109,7 +106,7 @@ public class RoleColtroller {
      * @return
      */
     @RequiresPermissions("sysmgr.role.query")
-    @RequestMapping(value="/findRoleAuth")
+    @RequestMapping(value="/findRoleAuth",method = {RequestMethod.POST})
     public Result findRoleAuth(@RequestBody RoleAuth roleAuth){
         return roleService.selectAuthByRoleId(roleAuth.getRoleId());
     }
@@ -120,7 +117,7 @@ public class RoleColtroller {
      * @return
      */
     @RequiresPermissions("sysmgr.role.query")
-    @RequestMapping(value="/listall")
+    @RequestMapping(value="/listall",method = {RequestMethod.POST,RequestMethod.GET})
     public Result list(){
         QueryWrapper<Role> eWrapper = new QueryWrapper();
         eWrapper.eq("yn_flag","1");

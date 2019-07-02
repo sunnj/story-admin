@@ -18,6 +18,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 import javax.servlet.http.HttpServletResponse;
 import java.util.List;
@@ -47,9 +48,8 @@ public class LoginController {
      * @param user
      * @return
      */
-    @SuppressWarnings("unchecked")
-    @RequestMapping(value="/login")
     @ResponseBody
+    @RequestMapping(value="/login",method = {RequestMethod.POST})
     public Result login(HttpServletResponse response, @RequestBody UserVo user) {
         return userService.login(user,response);
     }
@@ -58,8 +58,8 @@ public class LoginController {
      * erp登录验证ticket，生成本地token，由本地来管理token生命周期
      * @return
      */
-    @RequestMapping(value="/valid_erp")
     @ResponseBody
+    @RequestMapping(value="/valid_erp",method = {RequestMethod.POST,RequestMethod.GET})
     public Result loginErp(HttpServletResponse response) {
         response.setHeader("Access-Control-Allow-Origin", domain);
         response.setHeader("Access-Control-Allow-Credentials", "true");
@@ -71,8 +71,8 @@ public class LoginController {
      * @return
      */
     @RequiresAuthentication
-    @RequestMapping(value="/info")
     @ResponseBody
+    @RequestMapping(value="/info",method = {RequestMethod.POST,RequestMethod.GET})
     public Result info(){
         Result result = new Result();
         result.setResult(true);
