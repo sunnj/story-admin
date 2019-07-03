@@ -130,6 +130,10 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
         String token = JwtUtil.sign(account, currentTimeMillis);
         json.put("token", token);
 
+        //更新RefreshToken缓存的时间戳
+        String refreshTokenKey= SecurityConsts.PREFIX_SHIRO_REFRESH_TOKEN + account;
+        jedisUtils.saveString(refreshTokenKey, currentTimeMillis, jwtProperties.getTokenExpireTime()*60);
+
         //写入header
         response.setHeader(SecurityConsts.REQUEST_AUTH_HEADER, token);
         response.setHeader("Access-Control-Expose-Headers", SecurityConsts.REQUEST_AUTH_HEADER);

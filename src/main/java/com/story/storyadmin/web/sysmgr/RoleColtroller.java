@@ -25,7 +25,7 @@ public class RoleColtroller {
     RoleService roleService;
 
     @RequiresPermissions("sysmgr.role.query")
-    @RequestMapping(value="/list",method = {RequestMethod.POST})
+    @RequestMapping(value="/list",method = {RequestMethod.POST,RequestMethod.GET})
     public Result list(Role role,
                        @RequestParam(defaultValue = "1")int pageNo,
                        @RequestParam(defaultValue = "10")int limit){

@@ -8,6 +8,7 @@ import com.story.storyadmin.constant.Constants;
 import com.story.storyadmin.constant.SecurityConsts;
 import com.story.storyadmin.domain.vo.Result;
 import com.story.storyadmin.service.common.ISyncCacheService;
+import com.story.storyadmin.utils.JedisUtils;
 import org.apache.shiro.web.filter.authc.BasicHttpAuthenticationFilter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -26,12 +27,14 @@ public class JwtFilter extends BasicHttpAuthenticationFilter {
 
     JwtProperties jwtProperties;
     ISyncCacheService syncCacheService;
+    JedisUtils jedisUtils;
 
     public JwtFilter(){}
 
-    public JwtFilter(JwtProperties jwtProperties,ISyncCacheService syncCacheService){
+    public JwtFilter(JwtProperties jwtProperties, ISyncCacheService syncCacheService, JedisUtils jedisUtils){
         this.jwtProperties=jwtProperties;
         this.syncCacheService=syncCacheService;
+        this.jedisUtils = jedisUtils;
     }
 
 
@@ -88,10 +91,27 @@ public class JwtFilter extends BasicHttpAuthenticationFilter {
         //检查刷新规则
         if (this.refreshCheck(authorization, currentTimeMillis)) {
             String lockName = SecurityConsts.PREFIX_SHIRO_REFRESH_CHECK + account;
-            boolean b = syncCacheService.getLock(lockName, Constants.ExpireTime.ONE_HOUR);
+            boolean b = syncCacheService.getLock(lockName, Constants.ExpireTime.ONE_MINUTE);
             if (b) {
+                //获取到锁
+                String refreshTokenKey= SecurityConsts.PREFIX_SHIRO_REFRESH_TOKEN + account;
+                if(jedisUtils.exists(refreshTokenKey)){
+                    //检查redis中的时间戳与token的时间戳是否一致
+                    String tokenTimeStamp = jedisUtils.get(refreshTokenKey);
+                    String tokenMillis= JwtUtil.getClaim(authorization,SecurityConsts.CURRENT_TIME_MILLIS);
+                    if(!tokenMillis.equals(tokenTimeStamp)){
+                        LOGGER.info(String.format("账户%s的令牌无效", account));
+                        return false;
+                    }
+                }
+                //时间戳一致，则颁发新的令牌
                 LOGGER.info(String.format("为账户%s颁发新的令牌", account));
-                String newToken = JwtUtil.sign(account, String.valueOf(currentTimeMillis));
+                String strCurrentTimeMillis = String.valueOf(currentTimeMillis);
+                String newToken = JwtUtil.sign(account,strCurrentTimeMillis);
+
+                //更新缓存中的token时间戳
+                jedisUtils.saveString(refreshTokenKey, strCurrentTimeMillis, jwtProperties.getTokenExpireTime()*60);
+
                 HttpServletResponse httpServletResponse = (HttpServletResponse) response;
                 httpServletResponse.setHeader(SecurityConsts.REQUEST_AUTH_HEADER, newToken);
                 httpServletResponse.setHeader("Access-Control-Expose-Headers", SecurityConsts.REQUEST_AUTH_HEADER);

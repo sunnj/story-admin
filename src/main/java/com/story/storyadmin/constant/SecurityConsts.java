@@ -25,6 +25,11 @@ public class SecurityConsts {
     public static final String PREFIX_SHIRO_CACHE = "story-admin:cache:";
 
     /**
+     * redis-key-前缀-shiro:refresh_token
+     */
+    public final static String PREFIX_SHIRO_REFRESH_TOKEN = "story-admin:refresh_token:";
+
+    /**
      * redis-key-前缀-shiro:refresh_check
      */
     public final static String PREFIX_SHIRO_REFRESH_CHECK = "story:refresh_check:";

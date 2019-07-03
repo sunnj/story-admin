@@ -71,7 +71,7 @@ public class ShiroConfig {
 
         // 添加jwt过滤器
         Map<String, Filter> filterMap = new HashMap<>();
-        filterMap.put("jwt", new JwtFilter(jwtProp,syncCacheService));
+        filterMap.put("jwt", new JwtFilter(jwtProp,syncCacheService,jedisUtils));
         filterMap.put("logout", new SystemLogoutFilter(jedisUtils));
         shiroFilter.setFilters(filterMap);
 

@@ -34,7 +34,7 @@ public class UserController {
      * @return
      */
     @RequiresPermissions("sysmgr.user.query")
-    @RequestMapping(value="/list",method = {RequestMethod.POST})
+    @RequestMapping(value="/list",method = {RequestMethod.POST,RequestMethod.GET})
     public Result list(User user,
                        @RequestParam(defaultValue = "1")int pageNo,
                        @RequestParam(defaultValue = "10")int limit){
