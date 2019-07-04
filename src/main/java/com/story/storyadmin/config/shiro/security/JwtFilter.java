@@ -80,7 +80,7 @@ public class JwtFilter extends BasicHttpAuthenticationFilter {
     }
 
     /**
-     * 检查是否需要,刷新Token
+     * 检查是否需要,若需要则校验时间戳，刷新Token，并更新时间戳
      * @param account
      * @param authorization
      * @param response
@@ -100,8 +100,7 @@ public class JwtFilter extends BasicHttpAuthenticationFilter {
                     String tokenTimeStamp = jedisUtils.get(refreshTokenKey);
                     String tokenMillis= JwtUtil.getClaim(authorization,SecurityConsts.CURRENT_TIME_MILLIS);
                     if(!tokenMillis.equals(tokenTimeStamp)){
-                        LOGGER.info(String.format("账户%s的令牌无效", account));
-                        return false;
+                        throw new TokenExpiredException(String.format("账户%s的令牌无效", account));
                     }
                 }
                 //时间戳一致，则颁发新的令牌
@@ -153,9 +152,9 @@ public class JwtFilter extends BasicHttpAuthenticationFilter {
                 String msg = e.getMessage();
                 Throwable throwable = e.getCause();
                 if (throwable != null && throwable instanceof SignatureVerificationException) {
-                    msg = "Token或者密钥不正确(" + throwable.getMessage() + ")";
+                    msg = String.format("Token或者密钥不正确(%s)",throwable.getMessage());
                 } else if (throwable != null && throwable instanceof TokenExpiredException) {
-                    msg = "Token已过期(" + throwable.getMessage() + ")";
+                    msg = String.format("Token已过期(%s)",throwable.getMessage());
                 } else {
                     if (throwable != null) {
                         msg = throwable.getMessage();
