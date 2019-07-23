@@ -36,13 +36,3 @@ mybatis-plus:
   configuration:
     #日志打印sql
     log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
-
-#动态设置拦截器
-permission-config:
-  perms:
-  - key: /user/login
-    value: anon
-  - key: /logout
-    value: logout
-  - key: /**
-    value: jwt

@@ -22,15 +22,14 @@ import org.springframework.context.annotation.DependsOn;
 
 import javax.servlet.Filter;
 import java.util.HashMap;
-import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
 @Configuration
 public class ShiroConfig {
 
-    @Autowired
-    ShiroFilterProperties shiroFilterProperties;
+//    @Autowired
+//    ShiroFilterProperties shiroFilterProperties;
 
     @Bean
     public LifecycleBeanPostProcessor lifecycleBeanPostProcessor() {
@@ -83,13 +82,18 @@ public class ShiroConfig {
 
         //动态配置拦截器注入
         Map<String, String> filterRuleMap = new HashMap<>(16);
-        List<Map<String, String>> perms = shiroFilterProperties.getPerms();
+        List<Map<String, String>> perms = this.getShiroFilterProperties().getPerms();
         perms.forEach(perm -> filterRuleMap.put(perm.get("key"), perm.get("value")));
 
 
         shiroFilter.setFilterChainDefinitionMap(filterRuleMap);
 
         return shiroFilter;
+    }
+
+    @Bean
+    public ShiroFilterProperties getShiroFilterProperties(){
+        return new ShiroFilterProperties();
     }
 
 }
