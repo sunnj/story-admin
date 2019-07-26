@@ -24,7 +24,7 @@ import javax.servlet.http.HttpServletResponse;
 import java.util.List;
 
 /**
- * Created by lianghuaibin on 2018/12/26 11:02
+ * Created by sunningjun
  **/
 @Controller
 @RequestMapping(value="/user")
@@ -41,7 +41,6 @@ public class LoginController {
 
     @Value("${project.domain}")
     String domain;
-
 
     /**
      * 登录

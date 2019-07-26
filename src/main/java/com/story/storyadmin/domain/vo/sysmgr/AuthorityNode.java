@@ -15,7 +15,8 @@ import java.util.List;
 @Data
 public class AuthorityNode {
     private Long id;
-    private Long parendId;
+    private Long parentId;
+    private String fullId;
     private String label;
     private String code;
     private Integer showOrder;
@@ -23,9 +24,9 @@ public class AuthorityNode {
 
     public AuthorityNode(){}
 
-    public AuthorityNode(Long id, Long parendId, String label) {
+    public AuthorityNode(Long id, Long parentId, String label) {
         this.id = id;
-        this.parendId = parendId;
+        this.parentId = parentId;
         this.label = label;
     }
 

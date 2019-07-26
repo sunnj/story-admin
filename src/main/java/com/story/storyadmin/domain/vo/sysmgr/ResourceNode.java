@@ -15,7 +15,8 @@ import java.util.List;
 @Data
 public class ResourceNode {
     private Long id;
-    private Long parendId;
+    private Long parentId;
+    private String fullId;
     private String label;
     private String iconClass;
     private String url;
@@ -26,9 +27,9 @@ public class ResourceNode {
 
     public ResourceNode(){}
 
-    public ResourceNode(Long id, Long parendId, String label) {
+    public ResourceNode(Long id, Long parentId, String label) {
         this.id = id;
-        this.parendId = parendId;
+        this.parentId = parentId;
         this.label = label;
     }
 

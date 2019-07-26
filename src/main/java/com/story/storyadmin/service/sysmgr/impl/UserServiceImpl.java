@@ -5,11 +5,13 @@ import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.story.storyadmin.config.shiro.ShiroKit;
 import com.story.storyadmin.config.shiro.security.JwtProperties;
+import com.story.storyadmin.config.shiro.security.JwtToken;
 import com.story.storyadmin.config.shiro.security.JwtUtil;
 import com.story.storyadmin.config.shiro.security.UserContext;
 import com.story.storyadmin.constant.Constants;
 import com.story.storyadmin.constant.SecurityConsts;
 import com.story.storyadmin.constant.enumtype.YNFlagStatusEnum;
+import com.story.storyadmin.domain.entity.sysmgr.LoginLog;
 import com.story.storyadmin.domain.entity.sysmgr.User;
 import com.story.storyadmin.domain.entity.sysmgr.UserRole;
 import com.story.storyadmin.domain.vo.Result;
@@ -17,8 +19,13 @@ import com.story.storyadmin.domain.vo.sysmgr.UserPassword;
 import com.story.storyadmin.domain.vo.sysmgr.UserRoleVo;
 import com.story.storyadmin.domain.vo.sysmgr.UserVo;
 import com.story.storyadmin.mapper.sysmgr.UserMapper;
+import com.story.storyadmin.service.sysmgr.LoginLogService;
 import com.story.storyadmin.service.sysmgr.UserService;
 import com.story.storyadmin.utils.JedisUtils;
+import org.apache.shiro.SecurityUtils;
+import org.apache.shiro.authc.AuthenticationToken;
+import org.apache.shiro.authc.UsernamePasswordToken;
+import org.apache.shiro.subject.Subject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.Assert;
@@ -46,6 +53,9 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
 
     @Autowired
     JedisUtils jedisUtils;
+
+    @Autowired
+    LoginLogService loginLogService;
 
     @Override
     public User findUserByAccount(String account) {
@@ -89,7 +99,11 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
             return new Result(false, "该账号已被锁定", null, Constants.PASSWORD_CHECK_INVALID);
         }
 
-        this.loginSuccess(userBean.getAccount(), response);
+        String strToken= this.loginSuccess(userBean.getAccount(), response);
+
+        Subject subject = SecurityUtils.getSubject();
+        AuthenticationToken token= new JwtToken(strToken);
+        subject.login(token);
 
         //登录成功
         return new Result(true, "登录成功", null, Constants.TOKEN_CHECK_SUCCESS);
@@ -121,7 +135,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
      * @param account
      * @param response
      */
-    private void loginSuccess(String account, HttpServletResponse response) {
+    private String loginSuccess(String account, HttpServletResponse response) {
 
         String currentTimeMillis = String.valueOf(System.currentTimeMillis());
 
@@ -134,9 +148,22 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
         String refreshTokenKey= SecurityConsts.PREFIX_SHIRO_REFRESH_TOKEN + account;
         jedisUtils.saveString(refreshTokenKey, currentTimeMillis, jwtProperties.getTokenExpireTime()*60);
 
+        //记录登录日志
+        LoginLog loginLog= new LoginLog();
+        loginLog.setAccount(account);
+        loginLog.setLoginTime(Date.from(Instant.now()));
+        loginLog.setContent("登录成功");
+        loginLog.setYnFlag(YNFlagStatusEnum.VALID.getCode());
+        loginLog.setCreator(account);
+        loginLog.setEditor(account);
+        loginLog.setCreatedTime(loginLog.getLoginTime());
+        loginLogService.save(loginLog);
+
         //写入header
         response.setHeader(SecurityConsts.REQUEST_AUTH_HEADER, token);
         response.setHeader("Access-Control-Expose-Headers", SecurityConsts.REQUEST_AUTH_HEADER);
+
+        return token;
     }
 
     /**

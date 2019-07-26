@@ -48,6 +48,7 @@ public class ResourceServiceImpl extends ServiceImpl<ResourceMapper, Resource> i
         for (Resource node : resList) {
             if (node.getPid() == 0) {
                 newNode = new ResourceNode(node.getId(),node.getPid(),node.getName());
+                newNode.setFullId(node.getFullId());
                 newNode.setIconClass(node.getIconClass());
                 newNode.setUrl(node.getUrl());
                 newNode.setComponent(node.getComponent());
@@ -73,6 +74,7 @@ public class ResourceServiceImpl extends ServiceImpl<ResourceMapper, Resource> i
                     parentNode.setChildren(new ArrayList<>());
                 }
                 newNode = new ResourceNode(node.getId(),node.getPid(),node.getName());
+                newNode.setFullId(node.getFullId());
                 newNode.setIconClass(node.getIconClass());
                 newNode.setUrl(node.getUrl());
                 newNode.setComponent(node.getComponent());
@@ -156,18 +158,20 @@ public class ResourceServiceImpl extends ServiceImpl<ResourceMapper, Resource> i
     @Override
     public Result persist(Resource resource) {
         Date currentDate= Date.from(Instant.now());
+        //fullId
+        if(resource.getPid()!=null && resource.getPid()>0){
+            Resource parent= baseMapper.selectById(resource.getPid());
+            resource.setFullId(parent.getFullId()+'-'+ parent.getId());
+        }else{
+            resource.setFullId("0");
+        }
+
         if(resource.getId()!=null){
             resource.setEditor(UserContext.getCurrentUser().getAccount());
             resource.setModifiedTime(currentDate);
             baseMapper.updateById(resource);
         }else{
-            if(resource.getPid()!=null && resource.getPid()>0){
-                //fullId
-                Resource parent= baseMapper.selectById(resource.getPid());
-                resource.setFullId(parent.getFullId()+'-'+ parent.getId());
-            }else{
-                resource.setFullId("0");
-            }
+
             resource.setYnFlag("1");
             resource.setEditor(UserContext.getCurrentUser().getAccount());
             resource.setCreator(UserContext.getCurrentUser().getAccount());

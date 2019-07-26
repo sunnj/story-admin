@@ -1,15 +1,19 @@
-package com.story.storyadmin.domain.entity.sysmgr;
+package com.story.storyadmin.domain.entity.baseinfo;
 
 import com.baomidou.mybatisplus.annotation.TableName;
+import com.baomidou.mybatisplus.annotation.IdType;
 import com.story.storyadmin.domain.entity.BaseEntity;
 import java.time.LocalDateTime;
+import java.util.Date;
+
+import com.baomidou.mybatisplus.annotation.TableId;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.experimental.Accessors;
 
 /**
  * <p>
- * 附件表
+ * 字典表
  * </p>
  *
  * @author sunningjun
@@ -18,26 +22,35 @@ import lombok.experimental.Accessors;
 @Data
 @EqualsAndHashCode(callSuper = true)
 @Accessors(chain = true)
-@TableName("st_att")
-public class Att extends BaseEntity {
+@TableName("st_dict")
+public class Dict extends BaseEntity {
 
     private static final long serialVersionUID = 1L;
 
-    private LocalDateTime createDate;
+    /**
+     * 编码
+     */
+    private String code;
 
-    private Boolean deleteFlag;
+    /**
+     * 中文名称
+     */
+    private String chnName;
 
-    private String description;
+    /**
+     * 英文名称
+     */
+    private String engName;
 
-    private String lotId;
+    /**
+     * 排序
+     */
+    private Integer showOrder;
 
-    private String path;
-
-    private String type;
-
-    private Long fileSize;
-
-    private String originName;
+    /**
+     * 父编码
+     */
+    private String parentCode;
 
     /**
      * 有效标志
@@ -57,11 +70,12 @@ public class Att extends BaseEntity {
     /**
      * 创建时间
      */
-    private LocalDateTime createdTime;
+    private Date createdTime;
 
     /**
      * 修改时间
      */
-    private LocalDateTime modifiedTime;
+    private Date modifiedTime;
+
 
 }

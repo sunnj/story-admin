@@ -51,6 +51,7 @@ public class AuthorityServiceImpl extends ServiceImpl<AuthorityMapper, Authority
             if (node.getPid() == 0) {
                 newNode = new AuthorityNode(node.getId(),node.getPid(),node.getName());
                 newNode.setCode(node.getCode());
+                newNode.setFullId(node.getFullId());
                 newNode.setShowOrder(node.getShowOrder());
                 treeList.add(findChildren(newNode, resList));
             }
@@ -73,6 +74,7 @@ public class AuthorityServiceImpl extends ServiceImpl<AuthorityMapper, Authority
                 }
                 newNode = new AuthorityNode(node.getId(),node.getPid(),node.getName());
                 newNode.setCode(node.getCode());
+                newNode.setFullId(node.getFullId());
                 newNode.setShowOrder(node.getShowOrder());
                 parentNode.getChildren().add(findChildren(newNode, list));
             }
@@ -105,17 +107,19 @@ public class AuthorityServiceImpl extends ServiceImpl<AuthorityMapper, Authority
     @Override
     public Result persist(Authority auth) {
         Date currentDate= Date.from(Instant.now());
+
+        //fullId
+        if(auth.getPid()!=null && auth.getPid()>0){
+            Authority parent= baseMapper.selectById(auth.getPid());
+            auth.setFullId(parent.getFullId()+'-'+ parent.getId());
+        }else{
+            auth.setFullId("0");
+        }
+
         if(auth.getId()!=null){
             auth.setModifiedTime(currentDate);
             baseMapper.updateById(auth);
         }else{
-            if(auth.getPid()!=null && auth.getPid()>0){
-                //fullId
-                Authority parent= baseMapper.selectById(auth.getPid());
-                auth.setFullId(parent.getFullId()+'-'+ parent.getId());
-            }else{
-                auth.setFullId("0");
-            }
             auth.setYnFlag("1");
             auth.setEditor(UserContext.getCurrentUser().getAccount());
             auth.setCreator(UserContext.getCurrentUser().getAccount());

@@ -1,5 +1,6 @@
 package com.story.storyadmin.utils;
 
+import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.core.exceptions.MybatisPlusException;
 import com.baomidou.mybatisplus.core.toolkit.StringPool;
 import com.baomidou.mybatisplus.core.toolkit.StringUtils;
@@ -49,6 +50,7 @@ public class CodeGenerator {
         gc.setAuthor("sunningjun");
         gc.setOpen(false);
         gc.setServiceName("%sService");
+        gc.setIdType(IdType.AUTO);
         // gc.setSwagger2(true); 实体属性 Swagger2 注解
         mpg.setGlobalConfig(gc);
 

@@ -1,43 +1,46 @@
 package com.story.storyadmin.domain.entity.sysmgr;
 
 import com.baomidou.mybatisplus.annotation.TableName;
+import com.baomidou.mybatisplus.annotation.IdType;
 import com.story.storyadmin.domain.entity.BaseEntity;
 import java.time.LocalDateTime;
+import java.util.Date;
+
+import com.baomidou.mybatisplus.annotation.TableId;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.experimental.Accessors;
 
 /**
  * <p>
- * 附件表
+ * 登录日志
  * </p>
  *
  * @author sunningjun
- * @since 2019-07-12
+ * @since 2019-07-26
  */
 @Data
 @EqualsAndHashCode(callSuper = true)
 @Accessors(chain = true)
-@TableName("st_att")
-public class Att extends BaseEntity {
+@TableName("st_login_log")
+public class LoginLog extends BaseEntity {
 
     private static final long serialVersionUID = 1L;
 
-    private LocalDateTime createDate;
+    /**
+     * 用户名
+     */
+    private String account;
 
-    private Boolean deleteFlag;
+    /**
+     * 访问时间
+     */
+    private Date loginTime;
 
-    private String description;
-
-    private String lotId;
-
-    private String path;
-
-    private String type;
-
-    private Long fileSize;
-
-    private String originName;
+    /**
+     * 内容
+     */
+    private String content;
 
     /**
      * 有效标志
@@ -57,11 +60,12 @@ public class Att extends BaseEntity {
     /**
      * 创建时间
      */
-    private LocalDateTime createdTime;
+    private Date createdTime;
 
     /**
      * 修改时间
      */
-    private LocalDateTime modifiedTime;
+    private Date modifiedTime;
+
 
 }

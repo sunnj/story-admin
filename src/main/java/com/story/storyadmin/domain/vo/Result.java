@@ -13,8 +13,8 @@ public class Result<T> implements java.io.Serializable {
     public static final String SUCCESS = "SUCCESS";
     public static final Integer SUCCESS_CODE = 20000;
 
-    private boolean result;
-    private Integer code;
+    private boolean result = true;
+    private Integer code = SUCCESS_CODE;
     private String message;
     private T data;
 
