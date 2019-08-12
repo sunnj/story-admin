@@ -17,6 +17,8 @@ import org.apache.shiro.authz.AuthorizationInfo;
 import org.apache.shiro.authz.SimpleAuthorizationInfo;
 import org.apache.shiro.realm.AuthorizingRealm;
 import org.apache.shiro.subject.PrincipalCollection;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -24,6 +26,8 @@ import java.util.List;
 
 @Service
 public class ShiroRealm extends AuthorizingRealm {
+
+	private Logger logger = LoggerFactory.getLogger(this.getClass());
 
 	@Autowired
 	private UserService userService;
@@ -68,6 +72,8 @@ public class ShiroRealm extends AuthorizingRealm {
 	 */
 	@Override
 	protected AuthorizationInfo doGetAuthorizationInfo(PrincipalCollection principals) {
+//		logger.info("调用doGetAuthorizationInfo方法获取权限");
+
 		SimpleAuthorizationInfo authorizationInfo = new SimpleAuthorizationInfo();
 
 		String account = JwtUtil.getClaim(principals.toString(), SecurityConsts.ACCOUNT);

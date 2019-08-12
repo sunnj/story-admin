@@ -23,7 +23,7 @@ import java.io.PrintWriter;
 
 public class JwtFilter extends BasicHttpAuthenticationFilter {
 
-    private Logger LOGGER = LoggerFactory.getLogger(this.getClass());
+    private Logger logger = LoggerFactory.getLogger(this.getClass());
 
     JwtProperties jwtProperties;
     ISyncCacheService syncCacheService;
@@ -59,6 +59,8 @@ public class JwtFilter extends BasicHttpAuthenticationFilter {
      */
     @Override
     protected boolean executeLogin(ServletRequest request, ServletResponse response){
+        logger.info("调用executeLogin验证登录");
+
         HttpServletRequest httpServletRequest = (HttpServletRequest) request;
         String authorization = httpServletRequest.getHeader(SecurityConsts.REQUEST_AUTH_HEADER);
 
@@ -104,7 +106,7 @@ public class JwtFilter extends BasicHttpAuthenticationFilter {
                     }
                 }
                 //时间戳一致，则颁发新的令牌
-                LOGGER.info(String.format("为账户%s颁发新的令牌", account));
+                logger.info(String.format("为账户%s颁发新的令牌", account));
                 String strCurrentTimeMillis = String.valueOf(currentTimeMillis);
                 String newToken = JwtUtil.sign(account,strCurrentTimeMillis);
 
@@ -168,6 +170,18 @@ public class JwtFilter extends BasicHttpAuthenticationFilter {
     }
 
     /**
+     * 重写 onAccessDenied 方法，避免父类中调用再次executeLogin
+     * @param request
+     * @param response
+     * @return
+     */
+    @Override
+    protected boolean onAccessDenied(ServletRequest request, ServletResponse response) {
+        this.sendChallenge(request, response);
+        return false;
+    }
+
+    /**
      * 401非法请求
      *
      * @param req
@@ -188,7 +202,7 @@ public class JwtFilter extends BasicHttpAuthenticationFilter {
             result.setMessage(msg);
             out.append(JSON.toJSONString(result));
         } catch (IOException e) {
-            LOGGER.error("返回Response信息出现IOException异常:" + e.getMessage());
+            logger.error("返回Response信息出现IOException异常:" + e.getMessage());
         } finally {
             if (out != null) {
                 out.close();
