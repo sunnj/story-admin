@@ -13,6 +13,7 @@ import org.springframework.util.StringUtils;
 
 import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
+import javax.servlet.http.HttpServletRequest;
 import java.io.IOException;
 import java.io.PrintWriter;
 
@@ -33,14 +34,15 @@ public class SystemLogoutFilter extends LogoutFilter {
     protected boolean preHandle(ServletRequest request, ServletResponse response) {
         Subject subject = getSubject(request, response);
         try {
-            if(UserContext.getCurrentUser()!=null){
-                String account = UserContext.getCurrentUser().getAccount();
-                if(!StringUtils.isEmpty(account)){
-                    // 清除可能存在的Shiro权限信息缓存
-                    String tokenKey = SecurityConsts.PREFIX_SHIRO_CACHE + account;
-                    if (jedisUtils.exists(tokenKey)) {
-                        jedisUtils.delKey(tokenKey);
-                    }
+            HttpServletRequest httpServletRequest = (HttpServletRequest) request;
+            String authorization = httpServletRequest.getHeader(SecurityConsts.REQUEST_AUTH_HEADER);
+            String account = JwtUtil.getClaim(authorization, SecurityConsts.ACCOUNT);
+
+            if(!StringUtils.isEmpty(account)){
+                // 清除可能存在的Shiro权限信息缓存
+                String tokenKey = SecurityConsts.PREFIX_SHIRO_CACHE + account;
+                if (jedisUtils.exists(tokenKey)) {
+                    jedisUtils.delKey(tokenKey);
                 }
             }
 

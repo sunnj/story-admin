@@ -14,7 +14,7 @@ import org.springframework.web.bind.annotation.RestController;
  * @since 2019-07-02
  */
 @RestController
-@RequestMapping("/att")
+@RequestMapping("/sysmgr/att")
 public class AttController {
 
 }

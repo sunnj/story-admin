@@ -59,7 +59,7 @@ public class JwtFilter extends BasicHttpAuthenticationFilter {
      */
     @Override
     protected boolean executeLogin(ServletRequest request, ServletResponse response){
-        logger.info("调用executeLogin验证登录");
+//        logger.info("调用executeLogin验证登录");
 
         HttpServletRequest httpServletRequest = (HttpServletRequest) request;
         String authorization = httpServletRequest.getHeader(SecurityConsts.REQUEST_AUTH_HEADER);
@@ -177,6 +177,7 @@ public class JwtFilter extends BasicHttpAuthenticationFilter {
      */
     @Override
     protected boolean onAccessDenied(ServletRequest request, ServletResponse response) {
+//        logger.info("调用onAccessDenied拒绝访问");
         this.sendChallenge(request, response);
         return false;
     }
