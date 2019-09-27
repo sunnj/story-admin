@@ -3,6 +3,8 @@ package com.story.storyadmin.domain.entity.sysmgr;
 import com.baomidou.mybatisplus.annotation.TableName;
 import com.story.storyadmin.domain.entity.BaseEntity;
 import java.time.LocalDateTime;
+import java.util.Date;
+
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.experimental.Accessors;
@@ -23,21 +25,14 @@ public class Att extends BaseEntity {
 
     private static final long serialVersionUID = 1L;
 
-    private LocalDateTime createDate;
-
-    private Boolean deleteFlag;
-
-    private String description;
-
-    private String lotId;
-
-    private String path;
-
+    private String name;
+    private String slotId;
+    private String fileCate;
     private String type;
-
     private Long fileSize;
-
     private String originName;
+    private String path;
+    private String description;
 
     /**
      * 有效标志
@@ -57,11 +52,11 @@ public class Att extends BaseEntity {
     /**
      * 创建时间
      */
-    private LocalDateTime createdTime;
+    private Date createdTime;
 
     /**
      * 修改时间
      */
-    private LocalDateTime modifiedTime;
+    private Date modifiedTime;
 
 }

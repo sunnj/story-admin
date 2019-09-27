@@ -51,9 +51,15 @@ token:
 #动态设置拦截器
 permission-config:
   perms:
+    - key: /
+      value: anon
     - key: /user/login
       value: anon
     - key: /logout
       value: logout
     - key: /**
       value: jwt
+#天气
+weather-config:
+  appid: 93141834
+  appsecret: TpbfPI5b

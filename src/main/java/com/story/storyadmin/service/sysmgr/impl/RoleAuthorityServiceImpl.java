@@ -27,9 +27,6 @@ import java.util.stream.Collectors;
 public class RoleAuthorityServiceImpl extends ServiceImpl<RoleAuthorityMapper, RoleAuthority> implements RoleAuthorityService {
 
     @Autowired
-    protected RoleAuthorityMapper roleAuthorityMapper;
-
-    @Autowired
     protected UserRoleMapper userRoleMapper;
 
     /**
@@ -74,7 +71,7 @@ public class RoleAuthorityServiceImpl extends ServiceImpl<RoleAuthorityMapper, R
             QueryWrapper<RoleAuthority> roleAuthWrapper= new QueryWrapper<>();
             roleAuthWrapper.eq("yn_flag","1");
             roleAuthWrapper.in("role_id",userRoleList.stream().map(e -> e.getRoleId()).collect(Collectors.toSet()));
-            roleAuthList= roleAuthorityMapper.selectList(roleAuthWrapper);
+            roleAuthList= baseMapper.selectList(roleAuthWrapper);
         }
         return roleAuthList;
     }

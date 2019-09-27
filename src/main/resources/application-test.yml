@@ -28,3 +28,30 @@ spring:
         max-idle: 50
         max-active: 200
         max-wait: 3000
+  data:
+    mongodb:
+      host: localhost
+      port: 27017
+      database: story_admin_log
+  mail:
+    host: smtp.163.com
+    username: aaaa@163.com
+    password: 111111
+    properties:
+      mail:
+        smtp:
+          auth: true
+          timeout: 25000
+file:
+  multipart:
+    #文件上传
+    autoSaveEnabled: true
+    baseDir: D:/upload/
+# 备份
+dbbackup:
+  servername: 127.0.0.1
+  dbname: story_admin
+  username: root
+  password: 123456
+  installPath: ${file.upload:D:/Development/mysql-8.0.13-winx64}
+  backupPath: ${file.export:D:/Backup}

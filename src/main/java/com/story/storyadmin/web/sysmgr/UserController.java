@@ -4,6 +4,7 @@ package com.story.storyadmin.web.sysmgr;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import com.story.storyadmin.config.mongo.SysLogAnnotation;
 import com.story.storyadmin.config.shiro.security.UserContext;
 import com.story.storyadmin.constant.Constants;
 import com.story.storyadmin.domain.entity.sysmgr.User;
@@ -33,6 +34,7 @@ public class UserController {
      * @param limit
      * @return
      */
+    @SysLogAnnotation
     @RequiresPermissions("sysmgr.user.query")
     @RequestMapping(value="/list",method = {RequestMethod.POST,RequestMethod.GET})
     public Result list(User user,

@@ -29,14 +29,11 @@ public class JwtFilter extends BasicHttpAuthenticationFilter {
     ISyncCacheService syncCacheService;
     JedisUtils jedisUtils;
 
-    public JwtFilter(){}
-
     public JwtFilter(JwtProperties jwtProperties, ISyncCacheService syncCacheService, JedisUtils jedisUtils){
         this.jwtProperties=jwtProperties;
         this.syncCacheService=syncCacheService;
         this.jedisUtils = jedisUtils;
     }
-
 
     /**
      * 检测Header里Authorization字段
@@ -51,7 +48,6 @@ public class JwtFilter extends BasicHttpAuthenticationFilter {
 
     /**
      * 登录验证
-     *
      * @param request
      * @param response
      * @return
@@ -139,7 +135,6 @@ public class JwtFilter extends BasicHttpAuthenticationFilter {
 
     /**
      * 是否允许访问
-     *
      * @param request
      * @param response
      * @param mappedValue
@@ -150,6 +145,7 @@ public class JwtFilter extends BasicHttpAuthenticationFilter {
         if (isLoginAttempt(request, response)) {
             try {
                 this.executeLogin(request, response);
+                return true;
             } catch (Exception e) {
                 String msg = e.getMessage();
                 Throwable throwable = e.getCause();
@@ -162,11 +158,12 @@ public class JwtFilter extends BasicHttpAuthenticationFilter {
                         msg = throwable.getMessage();
                     }
                 }
-                this.response401(request, response, msg);
+                this.response401(response, msg);
                 return false;
             }
+        }else{
+            return false;
         }
-        return true;
     }
 
     /**
@@ -184,11 +181,10 @@ public class JwtFilter extends BasicHttpAuthenticationFilter {
 
     /**
      * 401非法请求
-     *
-     * @param req
      * @param resp
+     * @param msg
      */
-    private void response401(ServletRequest req, ServletResponse resp, String msg) {
+    private void response401(ServletResponse resp, String msg) {
         HttpServletResponse httpServletResponse = (HttpServletResponse) resp;
         httpServletResponse.setStatus(HttpStatus.UNAUTHORIZED.value());
         httpServletResponse.setCharacterEncoding("UTF-8");
@@ -210,5 +206,4 @@ public class JwtFilter extends BasicHttpAuthenticationFilter {
             }
         }
     }
-
 }

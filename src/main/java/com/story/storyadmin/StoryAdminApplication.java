@@ -1,5 +1,6 @@
 package com.story.storyadmin;
 
+import com.story.storyadmin.config.props.DbBackupProperties;
 import com.story.storyadmin.config.shiro.security.JwtProperties;
 import org.mybatis.spring.annotation.MapperScan;
 import org.springframework.boot.SpringApplication;
@@ -7,12 +8,11 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.builder.SpringApplicationBuilder;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.boot.web.servlet.support.SpringBootServletInitializer;
-import org.springframework.context.annotation.ImportResource;
 
 @SpringBootApplication
 //@ImportResource(locations={"classpath:spring/spring-config-*.xml"})
 @MapperScan("com.story.storyadmin.mapper")
-@EnableConfigurationProperties({JwtProperties.class})
+@EnableConfigurationProperties({JwtProperties.class, DbBackupProperties.class})
 public class StoryAdminApplication extends SpringBootServletInitializer {
 
     @Override
