@@ -1,5 +1,6 @@
 package com.story.storyadmin.config.mongo;
 
+import com.alibaba.fastjson.JSONObject;
 import com.story.storyadmin.config.shiro.LoginUser;
 import com.story.storyadmin.config.shiro.security.UserContext;
 import com.story.storyadmin.domain.entity.sysmgr.SysLog;
@@ -56,7 +57,7 @@ public class StorySysLogAspect {
         final String clazz = joinPoint.getSignature().getDeclaringTypeName().replaceAll(DEFAULT_PKG, SHORT_PKG);
         final String methodName = joinPoint.getSignature().getName();
         final Object[] args = joinPoint.getArgs();
-        final String params = Arrays.toString(args);
+        final String params = JSONObject.toJSONString(args);
         sysLogService.recordLog(new SysLog(logId.get(), account, ip, method, url, uri, clazz, methodName, DateUtils.currentDate(),
                 0L, params), null, null);
     }
