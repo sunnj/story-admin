@@ -131,7 +131,7 @@ public class MailServiceImpl implements MailService {
 		MimeMessage mimeMessage = mailSender.createMimeMessage();
 		MimeMessageHelper helper;
 
-		Configuration configuration  = new Configuration(Configuration.VERSION_2_3_29);
+		Configuration configuration  = new Configuration(Configuration.VERSION_2_3_28);
 		configuration.setClassForTemplateLoading(this.getClass(),"/mail");
 		Template template;
 		try {

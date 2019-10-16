@@ -3,6 +3,10 @@ server:
 spring:
   profiles:
     active: ${runProType}
+  freemarker:
+    cache: false
+    charset: UTF-8
+    suffix: .ftl
 
 logging:
   config: classpath:log4j2.xml
