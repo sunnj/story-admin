@@ -12,7 +12,7 @@ import java.util.List;
  * 定时任务 服务类
  * </p>
  *
- * @author sunningjun
+ * @author sunnj
  * @since 2019-08-18
  */
 public interface ScheduleJobService extends IService<ScheduleJob> {

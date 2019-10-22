@@ -8,7 +8,7 @@ import com.baomidou.mybatisplus.core.mapper.BaseMapper;
  * 附件表 Mapper 接口
  * </p>
  *
- * @author sunningjun
+ * @author sunnj
  * @since 2019-07-12
  */
 public interface AttMapper extends BaseMapper<Att> {

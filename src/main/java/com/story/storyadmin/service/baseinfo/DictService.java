@@ -10,7 +10,7 @@ import java.util.List;
  * 字典表 服务类
  * </p>
  *
- * @author sunningjun
+ * @author sunnj
  * @since 2019-07-12
  */
 public interface DictService extends IService<Dict> {

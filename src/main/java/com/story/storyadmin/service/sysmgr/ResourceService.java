@@ -13,7 +13,7 @@ import java.util.List;
  * 菜单表 服务类
  * </p>
  *
- * @author sunningjun
+ * @author sunnj
  * @since 2018-12-28
  */
 public interface ResourceService extends IService<Resource> {

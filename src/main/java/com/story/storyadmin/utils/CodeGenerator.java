@@ -47,7 +47,7 @@ public class CodeGenerator {
         GlobalConfig gc = new GlobalConfig();
         String projectPath = System.getProperty("user.dir");
         gc.setOutputDir(projectPath + "/src/main/java");
-        gc.setAuthor("sunningjun");
+        gc.setAuthor("sunnj");
         gc.setOpen(false);
         gc.setServiceName("%sService");
         gc.setIdType(IdType.AUTO);

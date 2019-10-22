@@ -20,7 +20,7 @@ import java.time.Instant;
  * 登录日志 前端控制器
  * </p>
  *
- * @author sunningjun
+ * @author sunnj
  * @since 2019-07-26
  */
 @RestController

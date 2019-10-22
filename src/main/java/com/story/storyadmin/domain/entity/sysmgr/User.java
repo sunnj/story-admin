@@ -15,7 +15,7 @@ import java.util.Date;
  * 用户表
  * </p>
  *
- * @author sunningjun
+ * @author sunnj
  * @since 2018-12-28
  */
 @Data

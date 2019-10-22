@@ -2,9 +2,6 @@ package com.story.storyadmin.constant.sysmgr;
 
 /**
  * 系统定时任务常量
- * 
- * @author dante
- *
  */
 public final class ScheduleJobConsts {
 

@@ -14,7 +14,7 @@ import lombok.experimental.Accessors;
  * 附件表
  * </p>
  *
- * @author sunningjun
+ * @author sunnj
  * @since 2019-07-12
  */
 @Data

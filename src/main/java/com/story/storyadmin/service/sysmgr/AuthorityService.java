@@ -12,7 +12,7 @@ import java.util.List;
  * 权限表 服务类
  * </p>
  *
- * @author sunningjun
+ * @author sunnj
  * @since 2018-12-28
  */
 public interface AuthorityService extends IService<Authority> {

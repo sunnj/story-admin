@@ -3,7 +3,7 @@ package com.story.storyadmin.domain.vo;
 import lombok.Data;
 
 /**
- * Created by lianghuaibin on 2018/12/26 10:14
+ *
  **/
 @Data
 public class Result<T> implements java.io.Serializable {

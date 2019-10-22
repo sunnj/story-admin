@@ -57,8 +57,6 @@ public class SSLContextSecurity {
 
     /**
      * @Description 根据版本号进行获取协议项下
-     * @Author      liangjilong
-     * @Date        2017年6月6日 上午11:15:27
      * @param tslVerision
      * @return 参数
      * @return String[] 返回类型

@@ -9,7 +9,7 @@ import com.story.storyadmin.domain.vo.Result;
  * DB备份表 服务类
  * </p>
  *
- * @author sunningjun
+ * @author sunnj
  * @since 2019-09-10
  */
 public interface BackupService extends IService<Backup> {

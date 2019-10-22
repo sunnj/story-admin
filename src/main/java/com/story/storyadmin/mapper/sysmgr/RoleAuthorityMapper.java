@@ -11,7 +11,7 @@ import java.util.List;
  * 权限表 Mapper 接口
  * </p>
  *
- * @author lianghuaibin
+ * @author
  * @since 2018-12-28
  */
 public interface RoleAuthorityMapper extends BaseMapper<RoleAuthority> {

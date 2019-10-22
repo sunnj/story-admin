@@ -29,11 +29,7 @@ public enum YNFlagStatusEnum {
 	
 	/**
 	 * 通过key 查找描述 方法
-	 * 
 	 * @param key
-	 *            .
-	 * @return string 返回对应名称.
-	 * @author ：jrhelin
 	 */
 	public static String getValueByKey(String key) {
 		for (YNFlagStatusEnum pm : YNFlagStatusEnum.values()) {

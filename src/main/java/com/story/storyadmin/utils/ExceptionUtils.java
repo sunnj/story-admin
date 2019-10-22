@@ -3,8 +3,6 @@ package com.story.storyadmin.utils;
 /**
  * 异常处理工具类
  * 
- * @author dante
- *
  */
 public final class ExceptionUtils {
 

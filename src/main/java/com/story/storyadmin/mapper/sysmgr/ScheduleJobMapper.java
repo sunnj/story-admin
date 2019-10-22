@@ -8,7 +8,7 @@ import com.baomidou.mybatisplus.core.mapper.BaseMapper;
  * 定时任务 Mapper 接口
  * </p>
  *
- * @author sunningjun
+ * @author sunnj
  * @since 2019-08-18
  */
 public interface ScheduleJobMapper extends BaseMapper<ScheduleJob> {

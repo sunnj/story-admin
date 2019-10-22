@@ -584,7 +584,6 @@ public class IOUtil {
      * 压缩文件-File
      * @param zipFile zip文件
      * @param srcFiles 被压缩源文件
-     * @author isea533
      */
     public static void ZipFiles(ZipOutputStream zis, String path,
                                 File... srcFiles) {
@@ -637,7 +636,6 @@ public class IOUtil {
      * 解压文件到指定目录
      * @param zipFile
      * @param descDir
-     * @author isea533
      */
     public static void unZipFiles(File zipFile, String descDir)
             throws IOException {

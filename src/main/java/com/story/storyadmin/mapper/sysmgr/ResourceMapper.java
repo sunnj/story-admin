@@ -9,7 +9,7 @@ import com.story.storyadmin.domain.entity.sysmgr.Resource;
  * 菜单表 Mapper 接口
  * </p>
  *
- * @author sunningjun
+ * @author sunnj
  * @since 2018-12-28
  */
 public interface ResourceMapper extends BaseMapper<Resource> {

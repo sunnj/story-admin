@@ -15,7 +15,7 @@ import javax.servlet.http.HttpServletResponse;
  * 用户表 服务类
  * </p>
  *
- * @author sunningjun
+ * @author sunnj
  * @since 2018-12-28
  */
 public interface UserService extends IService<User> {

@@ -20,7 +20,7 @@ import java.util.stream.Collectors;
  * 权限表 服务实现类
  * </p>
  *
- * @author sunningjun
+ * @author sunnj
  * @since 2018-12-28
  */
 @Service

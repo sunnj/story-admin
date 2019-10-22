@@ -31,7 +31,7 @@ public class SwaggerCofing extends WebMvcConfigurationSupport {
                 .title("STORY-ADMIN API")
                 .description("STORY-ADMIN's REST API")//详细描述
                 .version("1.0")
-                .contact(new Contact("sunningjun", "http://www.sundayfine.com", "sunnj87@163.com"))//作者
+                .contact(new Contact("sunnj", "http://www.sundayfine.com", "sunnj87@163.com"))//作者
 //                .license("The Apache License, Version 2.0")//许可证信息
 //                .licenseUrl("http://www.apache.org/licenses/LICENSE-2.0.html")//许可证地址
                 .build();

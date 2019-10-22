@@ -8,7 +8,7 @@ import com.baomidou.mybatisplus.core.mapper.BaseMapper;
  * 待办事项 Mapper 接口
  * </p>
  *
- * @author sunningjun
+ * @author sunnj
  * @since 2019-08-14
  */
 public interface TodoMapper extends BaseMapper<Todo> {

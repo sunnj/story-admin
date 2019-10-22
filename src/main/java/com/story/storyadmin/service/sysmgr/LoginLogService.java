@@ -8,7 +8,7 @@ import com.baomidou.mybatisplus.extension.service.IService;
  * 登录日志 服务类
  * </p>
  *
- * @author sunningjun
+ * @author sunnj
  * @since 2019-07-26
  */
 public interface LoginLogService extends IService<LoginLog> {

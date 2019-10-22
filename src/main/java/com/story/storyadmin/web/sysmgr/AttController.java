@@ -18,7 +18,7 @@ import org.springframework.web.bind.annotation.*;
  * 附件表 前端控制器
  * </p>
  *
- * @author sunningjun
+ * @author sunnj
  * @since 2019-07-02
  */
 @RestController

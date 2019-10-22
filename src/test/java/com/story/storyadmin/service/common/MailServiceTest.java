@@ -81,8 +81,8 @@ public class MailServiceTest {
         context.put("username", "nj.sun");
 
         List<String> attachments = new ArrayList<>();
-        attachments.add("C:\\Users\\sunningjun\\Desktop\\test.txt");
-        attachments.add("C:\\Users\\sunningjun\\Desktop\\test.rar");
+        attachments.add("C:\\Users\\sunnj\\Desktop\\test.txt");
+        attachments.add("C:\\Users\\sunnj\\Desktop\\test.rar");
 
         mailService.sendTemplateMail(sendTo,title,context, attachments,"test.ftl");
     }

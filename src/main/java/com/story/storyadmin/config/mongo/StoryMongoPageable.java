@@ -8,8 +8,6 @@ import org.springframework.data.domain.Sort;
 /**
  * MongoDB 分页辅助类
  * 
- * @author dante
- *
  */
 public class StoryMongoPageable implements Serializable, Pageable {
     private static final long serialVersionUID = 1;

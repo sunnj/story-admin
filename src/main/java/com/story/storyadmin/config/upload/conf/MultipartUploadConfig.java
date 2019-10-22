@@ -12,7 +12,7 @@ import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurationSupport;
 
 /**
- * @author admin
+ * @author sunnj
  */
 @Configuration
 public class MultipartUploadConfig extends WebMvcConfigurationSupport {

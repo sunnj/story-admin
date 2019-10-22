@@ -24,7 +24,7 @@ import javax.servlet.http.HttpServletResponse;
 import java.util.List;
 
 /**
- * Created by sunningjun
+ * Created by sunnj
  **/
 @Controller
 @RequestMapping(value="/user")

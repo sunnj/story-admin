@@ -5,8 +5,6 @@ import javax.servlet.http.HttpServletRequest;
 /**
  * 客户端IP地址工具类
  * 
- * @author dante
- *
  */
 public final class IPUtils {
 

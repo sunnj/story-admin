@@ -8,7 +8,7 @@ import com.baomidou.mybatisplus.core.mapper.BaseMapper;
  * DB备份表 Mapper 接口
  * </p>
  *
- * @author sunningjun
+ * @author sunnj
  * @since 2019-09-10
  */
 public interface BackupMapper extends BaseMapper<Backup> {

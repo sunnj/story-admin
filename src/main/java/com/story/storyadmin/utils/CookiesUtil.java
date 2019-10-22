@@ -12,7 +12,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 /**
- * Created by lianghuaibin on 2019/2/20 15:22
+ *
  **/
 public class CookiesUtil {
 
@@ -54,12 +54,8 @@ public class CookiesUtil {
 
     /**
      * 保存Cookies
-     *
-     * @param response
-     *            servlet请求
-     * @param value
-     *            保存值
-     * @author jxf
+     * @param response servlet请求
+     * @param value 保存值
      */
     public static HttpServletResponse setCookie(HttpServletResponse response, String name, String value, int time) {
         // new一个Cookie对象,键值对为参数

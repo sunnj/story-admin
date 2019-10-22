@@ -8,7 +8,7 @@ import com.story.storyadmin.domain.entity.sysmgr.Role;
  * 角色表 Mapper 接口
  * </p>
  *
- * @author sunningjun
+ * @author sunnj
  * @since 2018-12-28
  */
 public interface RoleMapper extends BaseMapper<Role> {

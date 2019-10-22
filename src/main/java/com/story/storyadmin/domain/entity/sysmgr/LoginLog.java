@@ -16,7 +16,7 @@ import lombok.experimental.Accessors;
  * 登录日志
  * </p>
  *
- * @author sunningjun
+ * @author sunnj
  * @since 2019-07-26
  */
 @Data

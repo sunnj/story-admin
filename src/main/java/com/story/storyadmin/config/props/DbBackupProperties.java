@@ -6,7 +6,7 @@ import lombok.Data;
 
 /**
  * 数据库备份配置
- * @author admin
+ * @author sunnj
  *
  */
 @ConfigurationProperties(prefix = "dbbackup")

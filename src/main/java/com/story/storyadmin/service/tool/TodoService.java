@@ -8,7 +8,7 @@ import com.baomidou.mybatisplus.extension.service.IService;
  * 待办事项 服务类
  * </p>
  *
- * @author sunningjun
+ * @author sunnj
  * @since 2019-08-14
  */
 public interface TodoService extends IService<Todo> {

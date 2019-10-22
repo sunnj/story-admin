@@ -4,7 +4,7 @@ import java.io.*;
 
 /**
  * 数据库备份/还原通用类
- * @author admin
+ * @author sunnj
  *
  */
 public class DataBaseUtils {
