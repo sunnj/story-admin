@@ -61,6 +61,14 @@ permission-config:
       value: anon
     - key: /logout
       value: logout
+    - key: /swagger-ui.html
+      value: anon
+    - key: /swagger-resources/**
+      value: anon
+    - key: /v2/api-docs/**
+      value: anon
+    - key: /webjars/**
+      value: anon
     - key: /**
       value: jwt
 #天气
