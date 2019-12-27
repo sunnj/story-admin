@@ -69,6 +69,8 @@ permission-config:
       value: anon
     - key: /webjars/**
       value: anon
+    - key: /druid/**
+      value: anon
     - key: /**
       value: jwt
 #天气
