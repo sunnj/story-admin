@@ -6,6 +6,7 @@ import com.story.storyadmin.config.shiro.cache.ShiroCacheManager;
 import com.story.storyadmin.config.shiro.security.JwtFilter;
 import com.story.storyadmin.config.shiro.security.JwtProperties;
 import com.story.storyadmin.config.shiro.security.SystemLogoutFilter;
+import com.story.storyadmin.config.shiro.security.UserContextFilter;
 import com.story.storyadmin.service.common.ISyncCacheService;
 import com.story.storyadmin.utils.JedisUtils;
 import org.apache.shiro.mgt.DefaultSessionStorageEvaluator;
@@ -16,6 +17,7 @@ import org.apache.shiro.spring.web.ShiroFilterFactoryBean;
 import org.apache.shiro.web.mgt.DefaultWebSecurityManager;
 import org.springframework.aop.framework.autoproxy.DefaultAdvisorAutoProxyCreator;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.web.servlet.FilterRegistrationBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.DependsOn;
@@ -85,7 +87,6 @@ public class ShiroConfig {
         List<Map<String, String>> perms = this.getShiroFilterProperties().getPerms();
         perms.forEach(perm -> filterRuleMap.put(perm.get("key"), perm.get("value")));
 
-
         shiroFilter.setFilterChainDefinitionMap(filterRuleMap);
 
         return shiroFilter;
@@ -94,6 +95,13 @@ public class ShiroConfig {
     @Bean
     public ShiroFilterProperties getShiroFilterProperties(){
         return new ShiroFilterProperties();
+    }
+
+    @Bean
+    public FilterRegistrationBean filterRegistrationBean(){
+        FilterRegistrationBean bean = new FilterRegistrationBean();
+        bean.setFilter(new UserContextFilter());
+        return bean;
     }
 
 }

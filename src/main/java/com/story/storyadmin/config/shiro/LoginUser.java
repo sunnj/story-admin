@@ -19,13 +19,18 @@ public class LoginUser implements Serializable {
     public String name;         // 姓名
 	public Long orgId;      // 组织ID
 
-
 	public LoginUser() {
 	}
 
-	public LoginUser(String account, Long orgId) {
+	public LoginUser(String account) {
 		this.account=account;
-		this.orgId=orgId;
+	}
+
+	public LoginUser(Long userId, String account, String name, Long orgId) {
+		this.userId = userId;
+		this.account = account;
+		this.name = name;
+		this.orgId = orgId;
 	}
 
 }

@@ -67,8 +67,8 @@ public class JwtFilter extends BasicHttpAuthenticationFilter {
         //绑定上下文获取账号
         String account = JwtUtil.getClaim(authorization, SecurityConsts.ACCOUNT);
 
-        //绑定上下文
-        new UserContext(new LoginUser(account, null));
+//        //绑定上下文
+//        new UserContext(new LoginUser(account, null));
 
         //检查是否需要更换token，需要则重新颁发
         this.refreshTokenIfNeed(account, authorization, response);
