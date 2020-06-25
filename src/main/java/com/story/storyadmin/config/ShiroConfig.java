@@ -8,6 +8,8 @@ import com.story.storyadmin.config.shiro.security.JwtProperties;
 import com.story.storyadmin.config.shiro.security.SystemLogoutFilter;
 import com.story.storyadmin.config.shiro.security.UserContextFilter;
 import com.story.storyadmin.service.common.ISyncCacheService;
+import com.story.storyadmin.service.common.SyncCacheService;
+import com.story.storyadmin.service.sysmgr.UserService;
 import com.story.storyadmin.utils.JedisUtils;
 import org.apache.shiro.mgt.DefaultSessionStorageEvaluator;
 import org.apache.shiro.mgt.DefaultSubjectDAO;
@@ -29,9 +31,6 @@ import java.util.Map;
 
 @Configuration
 public class ShiroConfig {
-
-//    @Autowired
-//    ShiroFilterProperties shiroFilterProperties;
 
     @Bean
     public LifecycleBeanPostProcessor lifecycleBeanPostProcessor() {
@@ -72,13 +71,13 @@ public class ShiroConfig {
     }
 
     @Bean
-    public ShiroFilterFactoryBean shiroFilter(DefaultWebSecurityManager securityManager, JedisUtils jedisUtils, JwtProperties jwtProp, ISyncCacheService syncCacheService) {
+    public ShiroFilterFactoryBean shiroFilter(DefaultWebSecurityManager securityManager, JedisUtils jedisUtils, JwtProperties jwtProp, SyncCacheService syncCacheService, UserService userService) {
         ShiroFilterFactoryBean shiroFilter = new ShiroFilterFactoryBean();
         shiroFilter.setSecurityManager(securityManager);
 
         // 添加jwt过滤器
         Map<String, Filter> filterMap = new HashMap<>();
-        filterMap.put("jwt", new JwtFilter(jwtProp,syncCacheService,jedisUtils));
+        filterMap.put("jwt", new JwtFilter(jwtProp,syncCacheService,jedisUtils,userService));
         filterMap.put("logout", new SystemLogoutFilter(jedisUtils));
         shiroFilter.setFilters(filterMap);
 
@@ -88,7 +87,6 @@ public class ShiroConfig {
         perms.forEach(perm -> filterRuleMap.put(perm.get("key"), perm.get("value")));
 
         shiroFilter.setFilterChainDefinitionMap(filterRuleMap);
-
         return shiroFilter;
     }
 

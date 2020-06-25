@@ -2,8 +2,8 @@ package com.story.storyadmin.constant.sysmgr;
 
 public enum UserStatusEnum {
 
-    NORMAL("0", "正常"),
-    LOCK("1","禁用");
+    NORMAL("1", "正常"),
+    LOCK("0","禁用");
 
     private String code;
     private String val;

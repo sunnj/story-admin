@@ -1,9 +1,13 @@
 package com.story.storyadmin.mapper.sysmgr;
 
+import com.baomidou.mybatisplus.annotation.SqlParser;
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
+import com.baomidou.mybatisplus.core.toolkit.Constants;
 import com.story.storyadmin.domain.entity.sysmgr.User;
 import com.story.storyadmin.domain.entity.sysmgr.UserRole;
 import org.apache.ibatis.annotations.Param;
+import org.apache.ibatis.annotations.Select;
 
 import java.util.List;
 
@@ -18,30 +22,10 @@ import java.util.List;
 public interface UserMapper extends BaseMapper<User> {
 
     /**
-     * 保存用户
-     * @param user
+     * 查询根据账号查询用户，忽略租户过滤
      * @return
      */
-    int persist(User user);
-
-
-    /**
-     * 根据用户Id删除角色
-     * @param user
-     * @return
-     */
-    int deleteRoleByUserId(UserRole user);
-
-    /**
-     * 批量插入
-     * @param userRoleList
-     */
-    void batchInsertUserRole(List<UserRole> userRoleList);
-
-    /**
-     * 根据用户Id获取角色
-     * @param userId
-     * @return
-     */
-    List<Long> selectRoleByUserId(@Param(value = "userId") Long userId);
+    @SqlParser(filter=true)
+    @Select("SELECT id,account,name,password,status,erp_flag FROM st_user ${ew.customSqlSegment}")
+    List<User> findUserByAccount(@Param(Constants.WRAPPER) QueryWrapper<User> wrapper);
 }

@@ -1,5 +1,6 @@
 package com.story.storyadmin.utils;
 
+import lombok.extern.slf4j.Slf4j;
 import org.dom4j.Document;
 import org.dom4j.io.OutputFormat;
 import org.dom4j.io.XMLWriter;
@@ -19,6 +20,7 @@ import java.util.zip.ZipOutputStream;
 /**
  *
  */
+@Slf4j
 public class IOUtil {
     private static String content = "",line=System.getProperty("line.separator");//换行相当于\n
     private static List fileList = new ArrayList();
@@ -52,13 +54,13 @@ public class IOUtil {
             }
             return content = buffer.toString();//返回
         } catch (Exception e) {
-            e.printStackTrace();
+            log.error("遇到错误",e);
         } finally {
             try {
                 if (reader != null)reader.close();
                 if (read != null)read.close();
             } catch (Exception e) {
-                e.printStackTrace();
+                log.error("遇到错误",e);
             }
         }
         return "";
@@ -97,7 +99,7 @@ public class IOUtil {
             dis.close();
 
         } catch (Exception e) {
-            e.printStackTrace();
+            log.error("遇到错误",e);
         }
         return newName;
     }
@@ -132,7 +134,7 @@ public class IOUtil {
             buffReader.close();
             buffWriter.close();
         } catch (Exception e) {
-            e.printStackTrace();
+            log.error("遇到错误",e);
             return false;
         }
         return flag;
@@ -166,7 +168,7 @@ public class IOUtil {
             buffWriter.close();
 
         } catch (Exception e) {
-            e.printStackTrace();
+            log.error("遇到错误",e);
             return false;
         }
         return flag;
@@ -189,7 +191,7 @@ public class IOUtil {
             in.close();
             out.close();
         } catch (Exception e) {
-            e.printStackTrace();
+            log.error("遇到错误",e);
         }
     }
     /**
@@ -207,7 +209,7 @@ public class IOUtil {
             in.close();
             out.close();
         } catch (Exception e) {
-            e.printStackTrace();
+            log.error("遇到错误",e);
         }
     }
     /**
@@ -229,7 +231,7 @@ public class IOUtil {
             if(output!=null)output.close();
             if(input!=null)input.close();
         } catch (Exception e) {
-            e.printStackTrace();
+            log.error("遇到错误",e);
             return false;
         }
         return true;
@@ -248,7 +250,7 @@ public class IOUtil {
             out.write(line + content);
             out.close();
         } catch (Exception ex) {
-            ex.printStackTrace();
+            log.error("遇到错误",ex);
             return false;
         }
         return flag;
@@ -281,7 +283,7 @@ public class IOUtil {
             bos.flush();
             bos.close();
         } catch (Exception ex) {
-            ex.printStackTrace();
+            log.error("遇到错误",ex);
             return false;
         }
         return flag;
@@ -312,7 +314,7 @@ public class IOUtil {
             out.close();
 
         } catch (Exception e) {
-            e.printStackTrace();
+            log.error("遇到错误",e);
             return false;
         }
         return true;
@@ -445,7 +447,7 @@ public class IOUtil {
             try {
                 srcFile.createNewFile();
             } catch (IOException e) {
-                e.printStackTrace();
+                log.error("遇到错误",e);
             }
         } else {
             File[] file = srcFile.listFiles();
@@ -475,7 +477,7 @@ public class IOUtil {
                 }
             }
         } catch (Exception e) {
-            e.printStackTrace();
+            log.error("遇到错误",e);
         }
         return fileList;
     }
@@ -510,7 +512,7 @@ public class IOUtil {
             bis.close();
             zos.close();
         } catch (IOException e) {
-            e.printStackTrace();
+            log.error("遇到错误",e);
         }
     }
     /**
@@ -561,7 +563,7 @@ public class IOUtil {
             }
             zis.close();
         } catch (Exception e) {
-            e.printStackTrace();
+            log.error("遇到错误",e);
         }
     }
 
@@ -617,7 +619,7 @@ public class IOUtil {
                 }
             }
         } catch (Exception e) {
-            e.printStackTrace();
+            log.error("遇到错误",e);
         }
     }
 
@@ -705,7 +707,7 @@ public class IOUtil {
                 }
             }
         } catch (Exception e) {
-            e.printStackTrace();
+            log.error("遇到错误",e);
         }
         return fileList;
     }
@@ -762,7 +764,7 @@ public class IOUtil {
             in.close();
             out.close();
         } catch (IOException e) {
-            e.printStackTrace();
+            log.error("遇到错误",e);
         }
     }
 
@@ -782,7 +784,7 @@ public class IOUtil {
             writer.write(document);
             writer.close();
         } catch (IOException e) {
-            e.printStackTrace();
+            log.error("遇到错误",e);
             ret=false;
         }
         return ret;
@@ -799,7 +801,7 @@ public class IOUtil {
             out.write("\n" + content);
             out.close();
         } catch (Exception ex) {
-            ex.printStackTrace();
+            log.error("遇到错误",ex);
             return false;
         }
         return true;
@@ -962,7 +964,7 @@ public class IOUtil {
             in.close();
             out.close();
         } catch (IOException e) {
-            e.printStackTrace();
+            log.error("遇到错误",e);
         }
         return key;
     }
@@ -984,7 +986,7 @@ public class IOUtil {
             in.close();
             out.close();
         } catch (IOException e) {
-            e.printStackTrace();
+            log.error("遇到错误",e);
         }
         return key;
     }
@@ -1002,7 +1004,7 @@ public class IOUtil {
             byte[] key = inputStr.getBytes();
             value = encoder.encodeBuffer(key);
         } catch (Exception e) {
-            e.printStackTrace();
+            log.error("遇到错误",e);
         }
         return value;
     }
@@ -1035,13 +1037,13 @@ public class IOUtil {
             str = baos.toString();
             baos.close();
         } catch (IOException e) {
-            e.printStackTrace();
+            log.error("遇到错误",e);
             try {
                 if(baos!=null){
                     baos.close();
                 }
             } catch (IOException e1) {
-                e1.printStackTrace();
+                log.error("遇到错误",e1);
             }
         }
         return str;

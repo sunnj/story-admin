@@ -3,11 +3,14 @@ package com.story.storyadmin.config.shiro.security;
 import com.alibaba.fastjson.JSON;
 import com.auth0.jwt.exceptions.SignatureVerificationException;
 import com.auth0.jwt.exceptions.TokenExpiredException;
-import com.story.storyadmin.config.shiro.LoginUser;
+import com.story.storyadmin.config.shiro.security.JwtProperties;
+import com.story.storyadmin.config.shiro.security.JwtToken;
+import com.story.storyadmin.config.shiro.security.JwtUtil;
 import com.story.storyadmin.constant.Constants;
 import com.story.storyadmin.constant.SecurityConsts;
 import com.story.storyadmin.domain.vo.Result;
-import com.story.storyadmin.service.common.ISyncCacheService;
+import com.story.storyadmin.service.common.SyncCacheService;
+import com.story.storyadmin.service.sysmgr.UserService;
 import com.story.storyadmin.utils.JedisUtils;
 import org.apache.shiro.web.filter.authc.BasicHttpAuthenticationFilter;
 import org.slf4j.Logger;
@@ -26,13 +29,15 @@ public class JwtFilter extends BasicHttpAuthenticationFilter {
     private Logger logger = LoggerFactory.getLogger(this.getClass());
 
     JwtProperties jwtProperties;
-    ISyncCacheService syncCacheService;
+    SyncCacheService syncCacheService;
     JedisUtils jedisUtils;
+    UserService userService;
 
-    public JwtFilter(JwtProperties jwtProperties, ISyncCacheService syncCacheService, JedisUtils jedisUtils){
+    public JwtFilter(JwtProperties jwtProperties, SyncCacheService syncCacheService, JedisUtils jedisUtils,UserService userService){
         this.jwtProperties=jwtProperties;
         this.syncCacheService=syncCacheService;
         this.jedisUtils = jedisUtils;
+        this.userService= userService;
     }
 
     /**
@@ -55,8 +60,6 @@ public class JwtFilter extends BasicHttpAuthenticationFilter {
      */
     @Override
     protected boolean executeLogin(ServletRequest request, ServletResponse response){
-//        logger.info("调用executeLogin验证登录");
-
         HttpServletRequest httpServletRequest = (HttpServletRequest) request;
         String authorization = httpServletRequest.getHeader(SecurityConsts.REQUEST_AUTH_HEADER);
 
@@ -64,11 +67,7 @@ public class JwtFilter extends BasicHttpAuthenticationFilter {
         // 提交给realm进行登入，如果错误他会抛出异常并被捕获
         getSubject(request, response).login(token);
 
-        //绑定上下文获取账号
         String account = JwtUtil.getClaim(authorization, SecurityConsts.ACCOUNT);
-
-//        //绑定上下文
-//        new UserContext(new LoginUser(account, null));
 
         //检查是否需要更换token，需要则重新颁发
         this.refreshTokenIfNeed(account, authorization, response);
@@ -85,7 +84,7 @@ public class JwtFilter extends BasicHttpAuthenticationFilter {
      * @return
      */
     private boolean refreshTokenIfNeed(String account, String authorization, ServletResponse response) {
-        Long currentTimeMillis = System.currentTimeMillis();
+        long currentTimeMillis = System.currentTimeMillis();
         //检查刷新规则
         if (this.refreshCheck(authorization, currentTimeMillis)) {
             String lockName = SecurityConsts.PREFIX_SHIRO_REFRESH_CHECK + account;
@@ -102,12 +101,7 @@ public class JwtFilter extends BasicHttpAuthenticationFilter {
                     }
                 }
                 //时间戳一致，则颁发新的令牌
-                logger.info(String.format("为账户%s颁发新的令牌", account));
-                String strCurrentTimeMillis = String.valueOf(currentTimeMillis);
-                String newToken = JwtUtil.sign(account,strCurrentTimeMillis);
-
-                //更新缓存中的token时间戳
-                jedisUtils.saveString(refreshTokenKey, strCurrentTimeMillis, jwtProperties.getTokenExpireTime()*60);
+                String newToken = userService.genToken(account, currentTimeMillis);
 
                 HttpServletResponse httpServletResponse = (HttpServletResponse) response;
                 httpServletResponse.setHeader(SecurityConsts.REQUEST_AUTH_HEADER, newToken);
@@ -120,7 +114,6 @@ public class JwtFilter extends BasicHttpAuthenticationFilter {
 
     /**
      * 检查是否需要更新Token
-     *
      * @param authorization
      * @param currentTimeMillis
      * @return
@@ -159,11 +152,9 @@ public class JwtFilter extends BasicHttpAuthenticationFilter {
                     }
                 }
                 this.response401(response, msg);
-                return false;
             }
-        }else{
-            return false;
         }
+        return false;
     }
 
     /**

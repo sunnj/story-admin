@@ -1,5 +1,5 @@
 project:
-  domain: http://localhost:9430
+  domain: http://localhost:9800
 
 spring:
   datasource:

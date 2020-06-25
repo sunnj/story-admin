@@ -12,6 +12,7 @@ import java.net.URLEncoder;
 
 import javax.servlet.http.HttpServletRequest;
 
+import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.codec.binary.Base64;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -19,6 +20,7 @@ import org.springframework.web.multipart.MultipartFile;
  * 文件保存工具类
  *
  */
+@Slf4j
 public class FileExtendUtils {
 
 	/**
@@ -94,7 +96,7 @@ public class FileExtendUtils {
 			if (fos != null)
 				fos.close();
 		} catch (Exception ex) {
-			ex.printStackTrace();
+			log.error("遇到错误",ex);
 		}
 	}
 
@@ -170,7 +172,7 @@ public class FileExtendUtils {
 				if (in != null)
 					in.close();
 			} catch (IOException e) {
-				e.printStackTrace();
+				log.error("遇到错误",e);
 			}
 		}
 	}

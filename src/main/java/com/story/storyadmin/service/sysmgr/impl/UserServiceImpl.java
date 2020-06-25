@@ -1,8 +1,8 @@
 package com.story.storyadmin.service.sysmgr.impl;
 
-import com.alibaba.fastjson.JSONObject;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import com.story.storyadmin.config.shiro.LoginUser;
 import com.story.storyadmin.config.shiro.ShiroKit;
 import com.story.storyadmin.config.shiro.security.JwtProperties;
 import com.story.storyadmin.config.shiro.security.JwtToken;
@@ -11,6 +11,7 @@ import com.story.storyadmin.config.shiro.security.UserContext;
 import com.story.storyadmin.constant.Constants;
 import com.story.storyadmin.constant.SecurityConsts;
 import com.story.storyadmin.constant.enumtype.YNFlagStatusEnum;
+import com.story.storyadmin.constant.sysmgr.UserStatusEnum;
 import com.story.storyadmin.domain.entity.sysmgr.LoginLog;
 import com.story.storyadmin.domain.entity.sysmgr.User;
 import com.story.storyadmin.domain.entity.sysmgr.UserRole;
@@ -20,11 +21,12 @@ import com.story.storyadmin.domain.vo.sysmgr.UserRoleVo;
 import com.story.storyadmin.domain.vo.sysmgr.UserVo;
 import com.story.storyadmin.mapper.sysmgr.UserMapper;
 import com.story.storyadmin.service.sysmgr.LoginLogService;
+import com.story.storyadmin.service.sysmgr.UserRoleService;
 import com.story.storyadmin.service.sysmgr.UserService;
 import com.story.storyadmin.utils.JedisUtils;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authc.AuthenticationToken;
-import org.apache.shiro.authc.UsernamePasswordToken;
 import org.apache.shiro.subject.Subject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -36,6 +38,7 @@ import java.time.Instant;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * <p>
@@ -45,6 +48,7 @@ import java.util.List;
  * @author sunnj
  * @since 2018-12-28
  */
+@Slf4j
 @Service
 public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements UserService {
 
@@ -57,13 +61,16 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
     @Autowired
     LoginLogService loginLogService;
 
+    @Autowired
+    UserRoleService userRoleService;
+
     @Override
     public User findUserByAccount(String account) {
         QueryWrapper<User> wrapper = new QueryWrapper<>();
         wrapper.eq("account", account);
         wrapper.eq("yn_flag", YNFlagStatusEnum.VALID.getCode());
 
-        List<User> userList = baseMapper.selectList(wrapper);
+        List<User> userList = baseMapper.findUserByAccount(wrapper);
         return userList.size() > 0 ? userList.get(0) : null;
     }
 
@@ -85,7 +92,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
         }
 
         //ERP账号直接提示账号不存在
-        if ("1".equals(userBean.getErpFlag())) {
+        if (YNFlagStatusEnum.VALID.getCode().equals(userBean.getErpFlag())) {
             return new Result(false, "账号不存在", null, Constants.PASSWORD_CHECK_INVALID);
         }
 
@@ -95,58 +102,33 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
         }
 
         //账号是否锁定
-        if ("0".equals(userBean.getStatus())) {
+        if (UserStatusEnum.LOCK.code().equals(userBean.getStatus())) {
             return new Result(false, "该账号已被锁定", null, Constants.PASSWORD_CHECK_INVALID);
         }
 
-        String strToken= this.loginSuccess(userBean.getAccount(), response);
+        String strToken;
+        try (UserContext context = new UserContext(new LoginUser(userBean.getAccount()))) {
+            strToken = this.loginSuccess(userBean.getAccount(),  response);
 
-        Subject subject = SecurityUtils.getSubject();
-        AuthenticationToken token= new JwtToken(strToken);
-        subject.login(token);
+            Subject subject = SecurityUtils.getSubject();
+            AuthenticationToken token = new JwtToken(strToken);
+            subject.login(token);
+        }
 
         //登录成功
-        return new Result(true, "登录成功", null, Constants.TOKEN_CHECK_SUCCESS);
-    }
-
-    /**
-     * ERP登录
-     * @return
-     */
-    @Override
-    public Result loginErp(HttpServletResponse response) {
-
-        //@Todo 待开发
-//        User userBean = this.findUserByAccount("admin");
-//        if (userBean == null || "0".equals(userBean.getErpFlag())) {
-//            //ERP账号不在系统中，或者系统中标志是非ERP账号
-//            return new Result(false, "用户未授权", null, Constants.PASSWORD_CHECK_INVALID);
-//        }
-//        //账号是否锁定
-//        if ("0".equals(userBean.getStatus())) {
-//            return new Result(false, "该账号已被锁定", null, Constants.PASSWORD_CHECK_INVALID);
-//        }
-        return new Result(true, "登录成功", null, Constants.TOKEN_CHECK_SUCCESS);
+        return new Result(true, "登录成功", strToken, Constants.TOKEN_CHECK_SUCCESS);
     }
 
     /**
      * 登录后更新缓存，生成token，设置响应头部信息
-     *
      * @param account
      * @param response
      */
-    private String loginSuccess(String account, HttpServletResponse response) {
-
-        String currentTimeMillis = String.valueOf(System.currentTimeMillis());
+    private String loginSuccess(String account,HttpServletResponse response) {
+        long millTimes= System.currentTimeMillis();
 
         //生成token
-        JSONObject json = new JSONObject();
-        String token = JwtUtil.sign(account, currentTimeMillis);
-        json.put("token", token);
-
-        //更新RefreshToken缓存的时间戳
-        String refreshTokenKey= SecurityConsts.PREFIX_SHIRO_REFRESH_TOKEN + account;
-        jedisUtils.saveString(refreshTokenKey, currentTimeMillis, jwtProperties.getTokenExpireTime()*60);
+        String token = this.genToken(account, millTimes);
 
         //记录登录日志
         LoginLog loginLog= new LoginLog();
@@ -166,9 +148,21 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
         return token;
     }
 
+    @Override
+    public String genToken(String account, long millTimes) {
+        log.info(String.format("为账户%s颁发新的令牌", account));
+
+        String currentTimeMillis = String.valueOf(millTimes);
+        String token = JwtUtil.sign(account, String.valueOf(millTimes));
+
+        //更新RefreshToken缓存的时间戳
+        String refreshTokenKey= SecurityConsts.PREFIX_SHIRO_REFRESH_TOKEN + account;
+        jedisUtils.saveString(refreshTokenKey, currentTimeMillis, jwtProperties.getTokenExpireTime()*60);
+        return token;
+    }
+
     /**
      * 保存
-     *
      * @param user
      * @return
      */
@@ -199,7 +193,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
         } else {
             User userBean = baseMapper.selectById(user.getId());
             if (user.getAccount().equals(userBean.getAccount())) {
-                if (!user.getPassword().equals("******")) {
+                if (!user.getPassword().equals("********")) {
                     //修改密码
                     user.setPassword(ShiroKit.md5(user.getPassword(), SecurityConsts.LOGIN_SALT));
                     user.setLastPwdModifiedTime(Date.from(Instant.now()));
@@ -221,13 +215,16 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
 
     @Override
     public Result findUserRole(Long userId) {
-        List<Long> auths = baseMapper.selectRoleByUserId(userId);
+        QueryWrapper<UserRole> queryWrapper= new QueryWrapper<>();
+        queryWrapper.eq("yn_flag",YNFlagStatusEnum.VALID.getCode());
+        queryWrapper.eq("user_id",userId);
+        List<UserRole> userRoles = userRoleService.list(queryWrapper);
+        List<Long> auths= userRoles.stream().map(e -> e.getRoleId()).collect(Collectors.toList());
         return new Result(true, null, auths, Constants.TOKEN_CHECK_SUCCESS);
     }
 
     /**
      * 保存用户角色
-     *
      * @param userRole
      * @return
      */
@@ -235,30 +232,36 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
     public Result saveUserRoles(UserRoleVo userRole) {
         Date currentDate = Date.from(Instant.now());
 
-        UserRole user = new UserRole();
-        user.setUserId(userRole.getUserId());
-        user.setModifiedTime(currentDate);
-        baseMapper.deleteRoleByUserId(user);
+        //先删除
+        QueryWrapper<UserRole> queryWrapper = new QueryWrapper<>();
+        queryWrapper.eq("yn_flag",YNFlagStatusEnum.VALID.getCode());
+        queryWrapper.eq("user_id",userRole.getUserId());
 
+        UserRole user = new UserRole();
+        user.setEditor(UserContext.getCurrentUser().getAccount());
+        user.setModifiedTime(currentDate);
+        user.setYnFlag(YNFlagStatusEnum.FAIL.getCode());
+        userRoleService.update(user,queryWrapper);
+
+        //再插入
         UserRole tempUserRole;
         List<UserRole> authList = new ArrayList<>();
         for (Long roleId : userRole.getRoleIds()) {
             tempUserRole = new UserRole(userRole.getUserId(), roleId);
-            tempUserRole.setYnFlag("1");
+            tempUserRole.setYnFlag(YNFlagStatusEnum.VALID.getCode());
             tempUserRole.setEditor(UserContext.getCurrentUser().getAccount());
             tempUserRole.setCreator(UserContext.getCurrentUser().getAccount());
             tempUserRole.setCreatedTime(currentDate);
             tempUserRole.setModifiedTime(currentDate);
             authList.add(tempUserRole);
         }
-        baseMapper.batchInsertUserRole(authList);
+        userRoleService.saveBatch(authList);
 
         return new Result(true, null, null, Constants.TOKEN_CHECK_SUCCESS);
     }
 
     /**
      * 修改密码
-     *
      * @param userPassword
      * @return
      */
@@ -279,7 +282,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
                     entity.setModifiedTime(Date.from(Instant.now()));
 
                     QueryWrapper<User> wrapper = new QueryWrapper<>();
-                    wrapper.eq("yn_flag", "1");
+                    wrapper.eq("yn_flag", YNFlagStatusEnum.VALID.getCode());
                     wrapper.eq("account", user.getAccount());
 
                     baseMapper.update(entity, wrapper);

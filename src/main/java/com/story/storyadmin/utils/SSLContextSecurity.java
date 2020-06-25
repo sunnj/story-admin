@@ -1,5 +1,7 @@
 package com.story.storyadmin.utils;
 
+import lombok.extern.slf4j.Slf4j;
+
 import javax.net.ssl.*;
 import java.io.IOException;
 import java.security.KeyManagementException;
@@ -10,6 +12,7 @@ import java.security.cert.CertificateException;
 /**
  * 上下文安全处理类
  */
+@Slf4j
 public class SSLContextSecurity {
     /**
      * 绕过验证
@@ -74,11 +77,11 @@ public class SSLContextSecurity {
             }
             return socket.getEnabledProtocols();
         } catch (KeyManagementException e) {
-            e.printStackTrace();
+            log.error("遇到错误",e);
         } catch (NoSuchAlgorithmException e) {
-            e.printStackTrace();
+            log.error("遇到错误",e);
         } catch (IOException e) {
-            e.printStackTrace();
+            log.error("遇到错误",e);
         }
         return null;
     }

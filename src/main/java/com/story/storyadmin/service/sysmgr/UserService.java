@@ -2,7 +2,6 @@ package com.story.storyadmin.service.sysmgr;
 
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.story.storyadmin.domain.entity.sysmgr.User;
-import com.story.storyadmin.domain.entity.sysmgr.UserRole;
 import com.story.storyadmin.domain.vo.Result;
 import com.story.storyadmin.domain.vo.sysmgr.UserPassword;
 import com.story.storyadmin.domain.vo.sysmgr.UserRoleVo;
@@ -35,10 +34,12 @@ public interface UserService extends IService<User> {
     Result login(UserVo user, HttpServletResponse response);
 
     /**
-     * ERP登录
+     * 生成token
+     * @param account
+     * @param millTimes
      * @return
      */
-    Result loginErp(HttpServletResponse response);
+    String genToken(String account, long millTimes);
 
     /**
      * 保存用户

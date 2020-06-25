@@ -1,5 +1,6 @@
 package com.story.storyadmin.utils;
 
+import lombok.extern.slf4j.Slf4j;
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
 import org.apache.http.HttpStatus;
@@ -37,7 +38,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-
+@Slf4j
 public class HttpClientUtils {
     private static Logger logger = LoggerFactory.getLogger(HttpClientUtils.class);
 
@@ -153,7 +154,7 @@ public class HttpClientUtils {
             wr.close();
             in.close();
         } catch (Exception e) {
-            e.printStackTrace();
+            log.error("遇到错误",e);
         }
         return sb.toString();
     }
@@ -194,7 +195,7 @@ public class HttpClientUtils {
             baos.close();
             is.close();
         } catch (IOException e) {
-            e.printStackTrace();
+            log.error("遇到错误",e);
         }
         return new String(baos.toByteArray(), "utf-8");
     }
@@ -219,7 +220,7 @@ public class HttpClientUtils {
             baos.close();
             is.close();
         } catch (IOException e) {
-            e.printStackTrace();
+            log.error("遇到错误",e);
         }
         return new String(baos.toByteArray(), encoding);
     }
@@ -373,7 +374,7 @@ public class HttpClientUtils {
                     inputStream = null;
                 }
             } catch (IOException e) {
-                e.printStackTrace();
+                log.error("遇到错误",e);
             }
         }
         return "";
@@ -431,7 +432,7 @@ public class HttpClientUtils {
             }
         } catch (IOException e) {
             logger.error("HttpUrlPost出现异常，异常信息为:" + e.getMessage());
-            e.printStackTrace();
+            log.error("遇到错误",e);
         } finally {
             if (response != null) {
                 try {
@@ -585,7 +586,7 @@ public class HttpClientUtils {
             }
         } catch (IOException e) {
             logger.error("HttpUrlPost出现异常，异常信息为:" + e.getMessage());
-            e.printStackTrace();
+            log.error("遇到错误",e);
         } finally {
             if (response != null) {
                 try {
@@ -663,13 +664,13 @@ public class HttpClientUtils {
             }
         } catch (IOException e) {
             logger.error("HttpUrlPost出现异常，异常信息为:" + e.getMessage());
-            e.printStackTrace();
+            log.error("遇到错误",e);
         } finally {
             if (response != null) {
                 try {
                     EntityUtils.consume(response.getEntity());
                 } catch (IOException e) {
-                    e.printStackTrace();
+                    log.error("遇到错误",e);
                 }
             }
         }
@@ -693,7 +694,7 @@ public class HttpClientUtils {
                 return "";
             }
         } catch (Exception e) {
-            e.printStackTrace();
+            log.error("遇到错误",e);
         }
         return "";
     }

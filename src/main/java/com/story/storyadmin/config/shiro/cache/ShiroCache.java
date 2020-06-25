@@ -93,13 +93,9 @@ public class ShiroCache<K,V> implements Cache<K,V> {
     public Collection<V> values() {
         Set keys = this.keys();
         List<V> values = new ArrayList<>();
-//        try {
-            for (Object key : keys) {
-                values.add((V)jedisUtils.getObject(this.getKey(key)));
-            }
-//        } catch (IOException e) {
-//            e.printStackTrace();
-//        }
+        for (Object key : keys) {
+            values.add((V)jedisUtils.getObject(this.getKey(key)));
+        }
         return values;
     }
 

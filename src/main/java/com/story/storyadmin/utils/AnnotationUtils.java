@@ -1,5 +1,7 @@
 package com.story.storyadmin.utils;
 
+import lombok.extern.slf4j.Slf4j;
+
 import java.io.File;
 import java.io.FileFilter;
 import java.io.IOException;
@@ -12,6 +14,7 @@ import java.util.List;
 import java.util.jar.JarEntry;
 import java.util.jar.JarFile;
 
+@Slf4j
 public class AnnotationUtils {
 
 	/**
@@ -93,19 +96,19 @@ public class AnnotationUtils {
 											// 添加到classes
 											classes.add(Class.forName(packageName + '.' + className));
 										} catch (ClassNotFoundException e) {
-											e.printStackTrace();
+											log.error("遇到错误",e);
 										}
 									}
 								}
 							}
 						}
 					} catch (IOException e) {
-						e.printStackTrace();
+						log.error("遇到错误",e);
 					}
 				}
 			}
 		} catch (IOException e) {
-			e.printStackTrace();
+			log.error("遇到错误",e);
 		}
 
 		return classes;
@@ -147,7 +150,7 @@ public class AnnotationUtils {
 					// 添加到集合中去
 					classes.add(Class.forName(packageName + '.' + className));
 				} catch (ClassNotFoundException e) {
-					e.printStackTrace();
+					log.error("遇到错误",e);
 				}
 			}
 		}

@@ -496,7 +496,7 @@ CREATE TABLE `st_schedule_job`  (
   `job_id` varchar(255) CHARACTER SET utf8 COLLATE utf8_bin NULL DEFAULT NULL COMMENT 'JobID',
   `job_name` varchar(255) CHARACTER SET utf8 COLLATE utf8_bin NULL DEFAULT NULL COMMENT 'Job名称',
   `cron` varchar(255) CHARACTER SET utf8 COLLATE utf8_bin NULL DEFAULT NULL COMMENT 'cron表达式',
-  `start_job` bit(1) NULL DEFAULT NULL COMMENT '启动状态',
+  `start_job` varchar(4) NULL DEFAULT NULL COMMENT '启动状态',
   `job_class` varchar(255) CHARACTER SET utf8 COLLATE utf8_bin NULL DEFAULT NULL COMMENT '方法',
   `start_time` datetime(0) NULL DEFAULT NULL COMMENT '开始时间',
   `fire_time` datetime(0) NULL DEFAULT NULL COMMENT '触发时间',
@@ -515,8 +515,8 @@ CREATE TABLE `st_schedule_job`  (
 -- ----------------------------
 -- Records of st_schedule_job
 -- ----------------------------
-INSERT INTO `st_schedule_job` VALUES (1, 'StoryDemoJob', '框架演示任务', '0 0/5 * * * ?', b'1', 'com.story.storyadmin.scheduler.StoryDemoJob', '2019-08-19 06:14:06', '2019-09-25 07:25:00', '2019-09-25 07:20:00', '2019-09-25 07:30:00', '演示，仅此而已', NULL, '1', 'admin', 'admin', '2019-08-19 06:14:20', '2019-09-25 07:25:00');
-INSERT INTO `st_schedule_job` VALUES (2, 'DbBackupJob', '数据库定时备份', '0 0 2 ? * TUE', b'0', 'com.story.storyadmin.scheduler.DbBackupJob', '2019-08-30 07:42:21', '2019-09-10 10:30:00', '2019-09-10 10:29:00', '2019-09-10 10:31:00', NULL, 'org.quartz.core.JobRunShell.run(JobRunShell.java:218)\norg.quartz.simpl.SimpleThreadPool$WorkerThread.run(SimpleThreadPool.java:573)\n', '1', 'admin', 'admin', '2019-08-30 07:42:29', '2019-09-10 19:37:28');
+INSERT INTO `st_schedule_job` VALUES (1, 'StoryDemoJob', '框架演示任务', '0 0/5 * * * ?', '1', 'com.story.storyadmin.scheduler.StoryDemoJob', '2019-08-19 06:14:06', '2019-09-25 07:25:00', '2019-09-25 07:20:00', '2019-09-25 07:30:00', '演示，仅此而已', NULL, '1', 'admin', 'admin', '2019-08-19 06:14:20', '2019-09-25 07:25:00');
+INSERT INTO `st_schedule_job` VALUES (2, 'DbBackupJob', '数据库定时备份', '0 0 2 ? * TUE', '0', 'com.story.storyadmin.scheduler.DbBackupJob', '2019-08-30 07:42:21', '2019-09-10 10:30:00', '2019-09-10 10:29:00', '2019-09-10 10:31:00', NULL, 'org.quartz.core.JobRunShell.run(JobRunShell.java:218)\norg.quartz.simpl.SimpleThreadPool$WorkerThread.run(SimpleThreadPool.java:573)\n', '1', 'admin', 'admin', '2019-08-30 07:42:29', '2019-09-10 19:37:28');
 
 -- ----------------------------
 -- Table structure for st_todo

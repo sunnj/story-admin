@@ -1,3 +1,6 @@
+project:
+  domain: http://localhost:9800
+
 spring:
   datasource:
     type: com.alibaba.druid.pool.DruidDataSource
@@ -20,8 +23,8 @@ spring:
     logSlowSql: true
   redis:
     database: 0
-    host: 192.168.99.100
-    port: 6379
+    host: localhost
+    port: 32770
     jedis:
       pool:
         min-idle: 10
@@ -35,13 +38,19 @@ spring:
       database: story_admin_log
   mail:
     host: smtp.163.com
-    username: aaaa@163.com
-    password: 111111
+    mailFrom: abcd@163.com
+    username: abcd
+    password: abcd
     properties:
       mail:
         smtp:
           auth: true
           timeout: 25000
+
+mybatis-plus:
+  configuration:
+    #日志打印sql
+    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
 file:
   multipart:
     #文件上传

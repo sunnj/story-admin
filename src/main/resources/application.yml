@@ -1,5 +1,5 @@
 server:
-  port: 9430
+  port: 9801
 spring:
   profiles:
     active: ${runProType}
@@ -55,24 +55,16 @@ token:
 #动态设置拦截器
 permission-config:
   perms:
-    - key: /
-      value: anon
-    - key: /user/login
-      value: anon
     - key: /logout
       value: logout
-    - key: /swagger-ui.html
-      value: anon
-    - key: /swagger-resources/**
-      value: anon
-    - key: /v2/api-docs/**
-      value: anon
-    - key: /webjars/**
-      value: anon
-    - key: /druid/**
-      value: anon
-    - key: /**
+    - key: /sysmgr/**
       value: jwt
+    - key: /baseinfo/**
+      value: jwt
+    - key: /tool/**
+      value: jwt
+    - key: /**
+      value: anon
 #天气
 weather-config:
   appid: 93141834

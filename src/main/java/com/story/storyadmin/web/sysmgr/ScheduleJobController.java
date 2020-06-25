@@ -89,15 +89,13 @@ public class ScheduleJobController {
     @RequiresPermissions("sysmgr.schedulejob.save")
     @RequestMapping(value="/save",method = {RequestMethod.POST})
     public Result save(@RequestBody ScheduleJob scheduleJob){
-        boolean startJob = scheduleJob.getStartJob() != null ? scheduleJob.getStartJob().booleanValue() : false;
-
         Date currentDate= DateUtils.currentDate();
         scheduleJob.setEditor(UserContext.getCurrentUser().getAccount());
         scheduleJob.setModifiedTime(currentDate);
         if(scheduleJob.getId()!=null){
             scheduleJobService.updateById(scheduleJob);
 
-            if(startJob) {
+            if(YNFlagStatusEnum.VALID.getCode().equals(scheduleJob.getStartJob())) {
                 storySchedulerService.updateJobCron(scheduleJob.getJobId(), scheduleJob.getCron(), scheduleJob.getStartTime());
                 storySchedulerService.resumeJob(scheduleJob.getJobId());
             } else {
@@ -110,7 +108,7 @@ public class ScheduleJobController {
             scheduleJob.setYnFlag(YNFlagStatusEnum.VALID.getCode());
             scheduleJobService.save(scheduleJob);
 
-            storySchedulerService.addJob(scheduleJob.getJobId(), scheduleJob.getJobClass(), scheduleJob.getCron(), scheduleJob.getStartTime(), startJob);
+            storySchedulerService.addJob(scheduleJob.getJobId(), scheduleJob.getJobClass(), scheduleJob.getCron(), scheduleJob.getStartTime(), YNFlagStatusEnum.VALID.getCode().equals(scheduleJob.getStartJob()));
         }
         return new Result(true,null,null, Constants.TOKEN_CHECK_SUCCESS);
     }

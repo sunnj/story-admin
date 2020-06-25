@@ -86,6 +86,12 @@
 			<groupId>com.baomidou</groupId>
 			<artifactId>mybatis-plus-boot-starter</artifactId>
 			<version>3.1.1</version>
+			<exclusions>
+				<exclusion>
+					<artifactId>mybatis-plus-extension</artifactId>
+					<groupId>com.baomidou</groupId>
+				</exclusion>
+			</exclusions>
 		</dependency>
 		<dependency>
 			<groupId>com.baomidou</groupId>
@@ -106,12 +112,7 @@
 		<dependency>
 			<groupId>org.apache.shiro</groupId>
 			<artifactId>shiro-spring</artifactId>
-			<version>1.4.0</version>
-		</dependency>
-		<dependency>
-			<groupId>org.apache.shiro</groupId>
-			<artifactId>shiro-ehcache</artifactId>
-			<version>1.4.0</version>
+			<version>1.5.3</version>
 		</dependency>
 		<!--JWT-->
 		<dependency>
@@ -128,7 +129,7 @@
 		<dependency>
 			<groupId>com.alibaba</groupId>
 			<artifactId>fastjson</artifactId>
-			<version>1.2.60</version>
+			<version>1.2.71</version>
 		</dependency>
 		<dependency>
 			<groupId>org.quartz-scheduler</groupId>

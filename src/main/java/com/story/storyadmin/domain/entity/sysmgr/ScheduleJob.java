@@ -42,7 +42,7 @@ public class ScheduleJob extends BaseEntity {
     /**
      * 启动状态
      */
-    private Boolean startJob;
+    private String startJob;
 
     /**
      * 方法

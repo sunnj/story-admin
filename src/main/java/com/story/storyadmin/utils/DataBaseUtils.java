@@ -1,5 +1,7 @@
 package com.story.storyadmin.utils;
 
+import lombok.extern.slf4j.Slf4j;
+
 import java.io.*;
 
 /**
@@ -7,6 +9,7 @@ import java.io.*;
  * @author sunnj
  *
  */
+@Slf4j
 public class DataBaseUtils {
 
 	/**
@@ -63,7 +66,7 @@ public class DataBaseUtils {
 			fout.close();
 			return relativePath+"/"+newFileName;
 		} catch (Exception e) {
-            e.printStackTrace();
+            log.error("遇到错误",e);
         }finally {  
             try {
             	if (in != null) {  
@@ -82,7 +85,7 @@ public class DataBaseUtils {
                 	fout.close();  
                 }
             } catch (IOException e) {  
-                e.printStackTrace();
+                log.error("遇到错误",e);
             }  
         } 
 		return null;

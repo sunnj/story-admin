@@ -1,17 +1,24 @@
 package com.story.storyadmin.web.sysmgr;
 
 
+import com.alibaba.fastjson.JSONObject;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.story.storyadmin.config.mongo.SysLogAnnotation;
+import com.story.storyadmin.config.shiro.security.JwtUtil;
 import com.story.storyadmin.config.shiro.security.UserContext;
 import com.story.storyadmin.constant.Constants;
+import com.story.storyadmin.constant.SecurityConsts;
 import com.story.storyadmin.domain.entity.sysmgr.User;
 import com.story.storyadmin.domain.vo.Result;
+import com.story.storyadmin.domain.vo.sysmgr.ResourceNode;
 import com.story.storyadmin.domain.vo.sysmgr.UserPassword;
 import com.story.storyadmin.domain.vo.sysmgr.UserRoleVo;
+import com.story.storyadmin.service.sysmgr.AuthorityService;
+import com.story.storyadmin.service.sysmgr.ResourceService;
 import com.story.storyadmin.service.sysmgr.UserService;
+import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authz.annotation.RequiresAuthentication;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,6 +26,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.time.Instant;
 import java.util.Date;
+import java.util.List;
 
 @RestController
 @RequestMapping(value="/sysmgr/user")
@@ -26,6 +34,12 @@ public class UserController {
 
     @Autowired
     UserService userService;
+
+    @Autowired
+    ResourceService resourceService;
+
+    @Autowired
+    AuthorityService authorityService;
 
     /**
      * 分页查询
@@ -134,5 +148,29 @@ public class UserController {
     @RequestMapping(value="/editpassword",method = {RequestMethod.POST})
     public Result editPassWord(@RequestBody UserPassword userPassword){
         return userService.editPassWord(userPassword);
+    }
+
+    /**
+     * 获取登录用户基础信息
+     * @return
+     */
+    @RequiresAuthentication
+    @RequestMapping(value="/info",method = RequestMethod.GET)
+    public Result info(){
+        User user = userService.findUserByAccount(JwtUtil.getClaim(SecurityUtils.getSubject().getPrincipal().toString(), SecurityConsts.ACCOUNT));
+        //查询菜单
+        List<ResourceNode> menus = resourceService.findByUserId(user.getId());
+        //查询权限
+        List<Object> authorityList = authorityService.findByUserId(user.getId());
+
+        JSONObject json = new JSONObject();
+        json.put("name", user.getName());
+        json.put("erp", user.getErpFlag());
+        json.put("avatar","");
+        json.put("roles",new String[]{"admin"});
+        json.put("menus",menus);
+        json.put("auth",authorityList);
+
+        return new Result(true,null,json,Constants.TOKEN_CHECK_SUCCESS);
     }
 }
